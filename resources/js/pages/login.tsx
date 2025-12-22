@@ -1,33 +1,16 @@
 import { useEffect, useState } from "react";
+import {router} from "@inertiajs/react";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    function handleLogin(e : React.FormEvent) {
+    function handleLogin(e: React.FormEvent) {
         e.preventDefault();
-        console.log("Email:", email);
-        console.log("Password:", password);
 
-        fetch("/login", {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email, password }),
-        })
-        .then(response => {
-            if (response.ok) {
-                alert("Login successful");
-            } else {
-                alert("Login failed");
-                console.log("Login failed with status:", response);
-            }
-        })
-        .catch(error => {
-            console.error("Error during login:", error);
-            alert("An error occurred during login");
+        router.post('/login', {
+            email,
+            password,
         });
     }
 

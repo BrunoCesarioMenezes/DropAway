@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -19,5 +20,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::get('/login', function () {
     return Inertia::render('login');
 })->name('login');
+
+Route::post('/login', [LoginController::class, 'store']);
 
 require __DIR__.'/settings.php';
