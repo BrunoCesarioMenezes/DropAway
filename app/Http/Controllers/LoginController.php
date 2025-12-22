@@ -26,7 +26,10 @@ class LoginController extends Controller
             'password' => ['required'],
         ]);
 
-        if (!Auth::attempt($credentials)) {
+        $isValid = Auth::guard('web')->attempt($credentials)
+                || Auth::guard('admin')->attempt($credentials);
+
+        if (!$isValid) {
             return back()->withErrors([
                 'email' => 'Credenciais inválidas.',
             ]);
@@ -57,8 +60,10 @@ class LoginController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(Request $request)
     {
-        //
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/login');
     }
 }
