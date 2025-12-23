@@ -1,4 +1,4 @@
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Alert, AlertDescription, AlertTitle } from '@/components/laravel-defaults/ui/alert';
 import { AlertCircleIcon } from 'lucide-react';
 
 export default function AlertError({

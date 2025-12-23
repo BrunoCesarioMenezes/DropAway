@@ -1,6 +1,6 @@
-import Heading from '@/components/heading';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
+import Heading from '@/components/laravel-defaults/heading';
+import { Button } from '@/components/laravel-defaults/ui/button';
+import { Separator } from '@/components/laravel-defaults/ui/separator';
 import { cn, isSameUrl, resolveUrl } from '@/lib/utils';
 import { edit as editAppearance } from '@/routes/appearance';
 import { edit } from '@/routes/profile';

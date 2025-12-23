@@ -1,6 +1,6 @@
-import { NavFooter } from '@/components/nav-footer';
-import { NavMain } from '@/components/nav-main';
-import { NavUser } from '@/components/nav-user';
+import { NavFooter } from '@/components/laravel-defaults/nav-footer';
+import { NavMain } from '@/components/laravel-defaults/nav-main';
+import { NavUser } from '@/components/laravel-defaults/nav-user';
 import {
     Sidebar,
     SidebarContent,
@@ -9,7 +9,7 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
-} from '@/components/ui/sidebar';
+} from '@/components/laravel-defaults/ui/sidebar';
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';

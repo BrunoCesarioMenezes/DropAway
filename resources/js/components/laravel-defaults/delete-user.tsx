@@ -1,7 +1,7 @@
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
-import HeadingSmall from '@/components/heading-small';
-import InputError from '@/components/input-error';
-import { Button } from '@/components/ui/button';
+import HeadingSmall from '@/components/laravel-defaults/heading-small';
+import InputError from '@/components/laravel-defaults/input-error';
+import { Button } from '@/components/laravel-defaults/ui/button';
 import {
     Dialog,
     DialogClose,
@@ -10,9 +10,9 @@ import {
     DialogFooter,
     DialogTitle,
     DialogTrigger,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+} from '@/components/laravel-defaults/ui/dialog';
+import { Input } from '@/components/laravel-defaults/ui/input';
+import { Label } from '@/components/laravel-defaults/ui/label';
 import { Form } from '@inertiajs/react';
 import { useRef } from 'react';
 
