@@ -7,6 +7,7 @@ use App\Http\Middleware\UserMiddleware;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
+use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 
 Route::middleware(AnyRoleMiddleware::class)->group(function () {
     Route::get('dashboard', function () {
@@ -22,11 +23,13 @@ Route::middleware(AdminMiddleware::class)->prefix('admin')->group(function () {
 
 });
 
-
-
 Route::get('/error', function () {
     return Inertia::render('error/ErrorPage');
 })->name('error');
+
+Route::get('/', function () {
+    return redirect()->route('login');
+})->name('home');
 
 require __DIR__.'/auth.php';
 require __DIR__.'/settings.php';
