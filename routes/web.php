@@ -29,3 +29,4 @@ Route::get('/error', function () {
 })->name('error');
 
 require __DIR__.'/auth.php';
+require __DIR__.'/settings.php';
