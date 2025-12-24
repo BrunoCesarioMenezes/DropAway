@@ -4,6 +4,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\AnyRoleMiddleware;
 use App\Http\Middleware\UserMiddleware;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -32,4 +33,8 @@ Route::get('/', function () {
 })->name('home');
 
 require __DIR__.'/auth.php';
+Route::get('/teste', function () {
+    return Inertia::render('teste');
+})->name('teste');
+
 require __DIR__.'/settings.php';
