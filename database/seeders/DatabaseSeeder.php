@@ -6,6 +6,7 @@ use App\Models\Admin;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,24 +15,28 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
+        // Usuário fixo de teste
         User::firstOrCreate(
             ['email' => 'test@example.com'],
             [
                 'name' => 'Test User',
-                'password' => bcrypt('password'),
+                'password' => Hash::make('password'),
                 'email_verified_at' => now(),
+                'photo' => 'users/default.png',
             ]
         );
 
+        // Admin fixo
         Admin::firstOrCreate(
             ['email' => 'admin@example.com'],
             [
                 'name' => 'Test Admin',
-                'password' => bcrypt('password'),
+                'password' => Hash::make('password'),
                 'email_verified_at' => now(),
             ]
         );
+
+        // 20 usuários fake (apenas usuários comuns)
+        User::factory()->count(20)->create();
     }
 }

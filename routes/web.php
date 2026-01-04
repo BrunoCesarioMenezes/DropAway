@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\AdminController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\AnyRoleMiddleware;
 use App\Http\Middleware\UserMiddleware;
@@ -9,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
+
 
 Route::middleware(AnyRoleMiddleware::class)->group(function () {
     Route::get('dashboard', function () {
@@ -21,6 +23,15 @@ Route::middleware(UserMiddleware::class)->group(function () {
 });
 
 Route::middleware(AdminMiddleware::class)->prefix('admin')->group(function () {
+
+    Route::get('/users', [AdminController::class, 'users'])
+        ->name('admin.users.index');
+
+    Route::get('/users/{id}/edit', [AdminController::class, 'editUser'])
+        ->name('admin.users.edit');
+
+    Route::delete('/users/{id}', [AdminController::class, 'destroyUser'])
+        ->name('admin.users.destroy');
 
 });
 
