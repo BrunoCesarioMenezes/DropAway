@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\UserController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\AnyRoleMiddleware;
 use App\Http\Middleware\UserMiddleware;
@@ -22,18 +22,23 @@ Route::middleware(UserMiddleware::class)->group(function () {
 
 });
 
-Route::middleware(AdminMiddleware::class)->prefix('admin')->group(function () {
+Route::middleware(AdminMiddleware::class)
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
 
-    Route::get('/users', [AdminController::class, 'users'])
-        ->name('admin.users.index');
+        Route::get('/users', [UserController::class, 'index'])
+            ->name('users.index');
 
-    Route::get('/users/{id}/edit', [AdminController::class, 'editUser'])
-        ->name('admin.users.edit');
+        Route::get('/users/{id}/edit', [UserController::class, 'edit'])
+            ->name('users.edit');
 
-    Route::delete('/users/{id}', [AdminController::class, 'destroyUser'])
-        ->name('admin.users.destroy');
+        Route::put('/users/{id}', [UserController::class, 'update'])
+            ->name('users.update');
 
-});
+        Route::delete('/users/{id}', [UserController::class, 'destroy'])
+            ->name('users.destroy');
+    });
 
 Route::get('/error', function () {
     return Inertia::render('error/ErrorPage');
