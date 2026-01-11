@@ -18,7 +18,12 @@ export default function Index({ users }: Props) {
             <div className="w-full rounded-2xl bg-[#362312] pt-6 pb-10 pl-5 pr-5">
                 {/* Header */}
                 <div className='flex w-full items-center justify-between border-white border-b-3 flex-row pb-5 '>
-                    <div className='w-25'> </div>
+                    <div className='flex gap-2'>
+                        <a href="" className="bg-[#03989E] hover:bg-teal-600 text-white px-4 py-2 rounded-lg font-bold flex items-center gap-2 {{ request('type', 'drivers') === 'drivers' ? '' : 'hidden' }}">
+                        Novo Motorista
+                    </a>    
+                        
+                    </div>
                     <h1 className="text-center text-2xl font-semibold text-white ">
                         Gerenciamento de Usuários
                     </h1>
