@@ -19,8 +19,8 @@ export default function Index({ users }: Props) {
                 {/* Header */}
                 <div className='flex w-full items-center justify-between border-white border-b-3 flex-row pb-5 '>
                     <div className='flex gap-2'>
-                        <a href="" className="bg-[#03989E] hover:bg-teal-600 text-white px-4 py-2 rounded-lg font-bold flex items-center gap-2 {{ request('type', 'drivers') === 'drivers' ? '' : 'hidden' }}">
-                        Novo Motorista
+                        <a href="" className="bg-[#03989E] hover:bg-teal-600 text-white px-4 py-2 rounded-lg font-bold flex items-center gap-2">
+                        Novo Usuario
                     </a>    
                         
                     </div>
