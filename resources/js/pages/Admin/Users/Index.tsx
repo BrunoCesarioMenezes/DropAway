@@ -64,13 +64,20 @@ export default function Index({ users }: Props) {
 
                                 <td className="flex justify-center py-2">
                                     {user.photo ? (
-                                        <img
-                                            src={`/storage/${user.photo}`}
-                                            className="h-10 w-10 rounded-full object-cover border"
-                                        />
+                                        <div className="h-10 w-10 rounded-full overflow-hidden border">
+                                            <img
+                                                src={`/storage/${user.photo}`}
+                                                alt="Foto do usuário"
+                                                className="h-full w-full object-cover"
+                                            />
+                                        </div>
                                     ) : (
-                                        <div className="h-10 w-10 flex items-center justify-center rounded-full bg-[#3b1f0b] text-[#ffd89b]">
-                                            👤
+                                        <div className="h-10 w-10 rounded-full overflow-hidden border">
+                                            <img
+                                                src="/img/default-avatar-icon-of-social-media-user-vector.jpg"
+                                                alt="Avatar padrão"
+                                                className="h-full w-full object-cover"
+                                            />
                                         </div>
                                     )}
                                 </td>
