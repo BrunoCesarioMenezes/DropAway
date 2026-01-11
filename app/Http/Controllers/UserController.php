@@ -18,32 +18,31 @@ class UserController extends Controller
     ]);
     }
 
-    public function store(Request $request)
-    {
-            $data = $request->validate([
-            'photo'        => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
-            'name'         => 'required|string|min:3',
-            'email'        => 'required|email|unique:drivers,email',
-            'password'     => 'required|string|min:6|confirmed',
-        ]);
+public function store(Request $request)
+{
+    $data = $request->validate([
+        'photo'    => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
+        'name'     => 'required|string|min:3',
+        'email'    => 'required|email|unique:users,email',
+        'password' => 'required|string|min:6',
+    ]);
 
+    $photoPath = null;
 
-        $photoPath = null;
-
-        if ($request->hasFile('photo')) {
-            $photoPath = $request->file('photo')->store('drivers_photos', 'public');
-        }
-
-        User::create([
-            'name'          => $data['name'],
-            'email'         => $data['email'],
-            'password'      => Hash::make($data['password']),
-            'photo'         => $photoPath,
-        ]);
-
-        return Inertia::render('Admin/Users/Index');
-
+    if ($request->hasFile('photo')) {
+        $photoPath = $request->file('photo')->store('users_photos', 'public');
     }
+
+    User::create([
+        'name'     => $data['name'],
+        'email'    => $data['email'],
+        'password' => Hash::make($data['password']),
+        'photo'    => $photoPath,
+    ]);
+
+    return redirect()->route('admin.users.index');
+}
+
 
     public function edit($id)
     {
