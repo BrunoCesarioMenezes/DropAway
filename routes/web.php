@@ -39,8 +39,9 @@ Route::middleware(AdminMiddleware::class)
         Route::delete('/users/{id}', [UserController::class, 'destroy'])
             ->name('users.destroy');
         
-        Route::post('/users/store', [UserController::class, 'store'])
+        Route::post('/users', [UserController::class, 'store'])
             ->name('users.store');
+
 
     });
 
