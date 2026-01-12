@@ -6,6 +6,8 @@ use Inertia\Inertia;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;
 
 class UserController extends Controller
 {
@@ -33,7 +35,7 @@ public function store(Request $request)
         $photoPath = $request->file('photo')->store('users_photos', 'public');
     }
 
-    User::create([
+    $user = User::create([
         'name'     => $data['name'],
         'email'    => $data['email'],
         'password' => Hash::make($data['password']),
@@ -42,6 +44,36 @@ public function store(Request $request)
 
     return redirect()->route('admin.users.index');
 }
+
+    public function register(Request $request)
+    {
+        $data = $request->validate([
+        'photo'    => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
+        'name'     => 'required|string|min:3',
+        'email'    => 'required|email|unique:users,email',
+        'password' => 'required|string|min:6',
+    ]);
+
+    $photoPath = null;
+
+    if ($request->hasFile('photo')) {
+        $photoPath = $request->file('photo')->store('users_photos', 'public');
+    }
+
+    $user = User::create([
+        'name'     => $data['name'],
+        'email'    => $data['email'],
+        'password' => Hash::make($data['password']),
+        'photo'    => $photoPath,
+    ]);
+
+    event(new Registered($user));
+
+    Auth::login($user);
+
+    return redirect(route('dashboard', absolute: false));
+
+    }
 
 
     public function edit($id)

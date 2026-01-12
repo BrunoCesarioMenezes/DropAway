@@ -45,6 +45,13 @@ Route::middleware(AdminMiddleware::class)
 
     });
 
+Route::post('/users/cadastro/create', [UserController::class, 'register'])
+            ->name('users.create');
+
+Route::get('/users/cadastro', function(){
+    return Inertia::render('cadastro');
+})->name('users.create.view');
+
 Route::get('/error', function () {
     return Inertia::render('error/ErrorPage');
 })->name('error');
