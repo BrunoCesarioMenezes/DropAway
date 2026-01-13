@@ -26,18 +26,19 @@ class LoginController extends Controller
             'password' => ['required'],
         ]);
 
-        $isValid = Auth::guard('web')->attempt($credentials)
-                || Auth::guard('admin')->attempt($credentials);
-
-        if (!$isValid) {
-            return back()->withErrors([
-                'email' => 'Credenciais inválidas.',
-            ]);
+        if(Auth::guard('web')->attempt($credentials)){
+            $request->session()->regenerate();
+            return redirect()->route('travels');
         }
 
-        $request->session()->regenerate();
+        if(Auth::guard('admin')->attempt($credentials)){
+            $request->session()->regenerate();
+            return redirect()->route('admin.dashboard');
+        }
 
-        return redirect()->route('dashboard');
+        return back()->withErrors([
+            'email' => 'Credenciais inválidas.',
+        ]);
     }
 
 
