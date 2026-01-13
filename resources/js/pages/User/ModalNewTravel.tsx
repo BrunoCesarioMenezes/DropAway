@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useJsApiLoader } from '@react-google-maps/api';
 import CitiesSearch from "./CitiesSearch";
 
+//TODO: Rever erros de tipagem
 
 export default function ModalnewTravel({toggleModal} : {toggleModal: () => void}) {
     const [mapCenter, setMapCenter] = useState({ lat: -23.5505, lng: -46.6333 });
