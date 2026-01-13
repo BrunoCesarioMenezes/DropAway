@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, router } from '@inertiajs/react';
 import { HomeIcon, UserIcon } from '@heroicons/react/24/solid';
 import CreateUserModal from './Create';
-
+import NavbarAdm from '@/components/NavbarAdm';
 type User = {
     id: number;
     name: string;
@@ -18,8 +18,9 @@ export default function Index({ users }: Props) {
     const [open, setOpen] = useState(false);
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-[#180C02] p-5">
-            <div className="w-full rounded-2xl bg-[#362312] pt-6 pb-10 pl-5 pr-5">
+        <div className="flex min-h-screen items-center justify-center">
+            <NavbarAdm></NavbarAdm> 
+            <div className="pt-20 px-6 w-full bg-[#362312] pt-6 pb-10 pl-5 pr-5">
 
                 {/* Header */}
                 <div className="flex w-full items-center justify-between border-b-2 border-white pb-5">
