@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ModalnewTravel from "./ModalNewTravel";
+import ModalnewTravel from "../../components/travel-components/ModalNewTravel";
 
 export default function Travels() {
     const [isModalOpen, setIsModalOpen] = useState(false);
