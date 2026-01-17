@@ -51,7 +51,9 @@ export default function CitiesSearch({
                 lat,
                 lng,
                 days: diffDays,
-                day_array: []
+                day_array: Array.from({ length: diffDays }, () => ({
+                    activities: []
+                }))
             });
 
                 // Limpa tudo
