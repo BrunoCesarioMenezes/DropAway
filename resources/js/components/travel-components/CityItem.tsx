@@ -34,8 +34,7 @@ export default function CityItem({ city, onAddActivity, onRemoveActivity, onRemo
         requestOptions: {
             types: ['establishment'],
             location: new google.maps.LatLng(city.lat, city.lng),
-            radius: 10000, // 5km é geralmente suficiente para cobrir o centro turístico
-            strictBounds: true,
+            radius: 10000,
         },
         debounce: 300,
         cache: 0,
