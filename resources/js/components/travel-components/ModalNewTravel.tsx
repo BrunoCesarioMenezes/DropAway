@@ -6,8 +6,6 @@ import CitiesSearch from "./CitiesSearch";
 import { City } from "./City";
 import ModalLeftSide from "./ModalLeftSide";
 
-//TODO: Rever erros de tipagem
-
 export default function ModalnewTravel({toggleModal} : {toggleModal: () => void}) {
     const [mapCenter, setMapCenter] = useState({ lat: -23.5505, lng: -46.6333 });
     const [selectedCities, setSelectedCities] = useState<City[]>([]);
@@ -18,12 +16,22 @@ export default function ModalnewTravel({toggleModal} : {toggleModal: () => void}
         libraries: ['places']
     });
 
-    const handleCitySelection = (cityData : City) => {
-                const newCoords = { lat: cityData.lat, lng: cityData.lng };
-                setMapCenter(newCoords);
-                setSelectedCities((prev) => [...prev, cityData]);
-                console.log("Cidade adicionada:", cityData.name);
+    const handleCitySelection = (cityData: City) => {
+        const newCoords = { lat: cityData.lat, lng: cityData.lng };
+        setMapCenter(newCoords);
+
+        // Criamos uma versão da cidade com o day_array populado
+        const cityWithDays = {
+                ...cityData,
+                // Se cityData.days for 3, cria [{activities: []}, {activities: []}, {activities: []}]
+                day_array: cityData.day_array || Array.from({ length: cityData.days }, () => ({
+                    activities: []
+                }))
             };
+
+            setSelectedCities((prev) => [...prev, cityWithDays]);
+            console.log("Cidade adicionada com estrutura de dias:", cityWithDays);
+        };
 
     return (
         <div className="fixed inset-0 flex flex-col z-10 w-[calc(100vw-2rem)] h-[calc(100vh-2rem)] bg-blue-800 m-auto rounded-xl overflow-hidden shadow-2xl">

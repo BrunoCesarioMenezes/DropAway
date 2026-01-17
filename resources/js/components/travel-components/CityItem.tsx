@@ -6,10 +6,11 @@ interface CityItemProps {
     city: City;
     // Atualizado para receber o índice do dia
     onAddActivity: (dayIndex: number, activity: string) => void;
+    onRemoveActivity: (dayIndex: number, activityIndex: number) => void;
     onRemoveCity: () => void;
 }
 
-export default function CityItem({ city, onAddActivity, onRemoveCity }: CityItemProps) {
+export default function CityItem({ city, onAddActivity, onRemoveActivity, onRemoveCity }: CityItemProps) {
     // Estado para controlar qual dia (aba) está selecionado. Começa no dia 0 (Dia 1)
     const [activeDay, setActiveDay] = useState(0);
 
@@ -51,7 +52,8 @@ export default function CityItem({ city, onAddActivity, onRemoveCity }: CityItem
 
             {/* --- ÁREA DAS ABAS (DIAS) --- */}
             <div className="flex gap-2 overflow-x-auto pb-2 mb-3 scrollbar-thin scrollbar-thumb-slate-600 flex-wrap">
-                {city.activities.map((_, index) => (
+                {/* Adicionado o '?' antes do .map */}
+                {city.day_array?.map((_, index) => (
                     <button
                         key={index}
                         onClick={() => setActiveDay(index)}
@@ -106,16 +108,15 @@ export default function CityItem({ city, onAddActivity, onRemoveCity }: CityItem
                 </p>
 
                 <div className="flex flex-col gap-2">
-                    {/* Verificamos se existem atividades para o dia ativo antes de mapear */}
-                    {city.activities[activeDay] && city.activities[activeDay].length > 0 ? (
-                        city.activities[activeDay].map((act, idx) => (
+                    {/* Usamos o ?. para verificar se o dia e as atividades existem com segurança */}
+                    {city.day_array?.[activeDay]?.activities && city.day_array[activeDay].activities.length > 0 ? (
+                        city.day_array[activeDay].activities.map((act, idx) => (
                             <div
                                 key={idx}
                                 className="bg-slate-900 text-slate-300 text-xs px-3 py-2 rounded border border-slate-700 flex items-center justify-between group"
                             >
-                                <span className="truncate pr-2">{act.split(',')[0]}</span>
-                                {/* Botão de remover atividade específica (opcional para o futuro) */}
-                                {/* <button className="opacity-0 group-hover:opacity-100 text-red-400">×</button> */}
+                                <span className="truncate pr-2">{act.name?.split(',')[0]}</span>
+                                <button onClick={() => onRemoveActivity(activeDay, idx)} className="bg-red-500 px-2 py-1 rounded text-xs">X</button>
                             </div>
                         ))
                     ) : (
