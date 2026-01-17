@@ -1,5 +1,5 @@
 import usePlacesAutocomplete from "use-places-autocomplete";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { City } from "./City";
 import { Activity } from "./Activity";
 
@@ -33,15 +33,19 @@ export default function CityItem({ city, onAddActivity, onRemoveActivity, onRemo
     } = usePlacesAutocomplete({
         requestOptions: {
             types: ['establishment'],
-            locationRestriction: {
-                east: city.lng + 0.05,
-                west: city.lng - 0.05,
-                north: city.lat + 0.05,
-                south: city.lat - 0.05,
-            },
+            location: new google.maps.LatLng(city.lat, city.lng),
+            radius: 10000, // 5km é geralmente suficiente para cobrir o centro turístico
+            strictBounds: true,
         },
         debounce: 300,
+        cache: 0,
     });
+
+    useEffect(() => {
+        // Quando a cidade mudar ou o componente montar, limpa resíduos de buscas anteriores
+        setValue("");
+        clearSuggestions();
+    }, [city.name, city.lat, city.lng, setValue, clearSuggestions]);
 
     // Dentro do CityItem.tsx, antes do return
     const handlePlaceSelect = (placeId: string) => {

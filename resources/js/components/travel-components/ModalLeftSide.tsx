@@ -71,7 +71,7 @@ export default function ModalLeftSide({ isLoaded, handleCitySelection, selectedC
                     <p className="text-sm text-slate-400">Seu Roteiro:</p>
                     {selectedCities.map((city, i) => (
                         <CityItem
-                            key={i}
+                            key={`${city.name}-${city.lat}-${city.lng}`}
                             city={city}
                             onAddActivity={(dayIndex, activity) => handleAddActivity({ cityIndex: i, dayIndex, activity: activity })}
                             onRemoveActivity={(dayIdx, actIdx) => handleRemoveActivity(i, dayIdx, actIdx)}
