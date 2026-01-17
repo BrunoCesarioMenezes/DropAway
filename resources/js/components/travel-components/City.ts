@@ -3,5 +3,5 @@ export interface City {
     lat: number;
     lng: number;
     days: number;
-    activities: string[];
+    activities: string[][];
 }

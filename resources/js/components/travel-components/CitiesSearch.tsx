@@ -45,22 +45,23 @@ export default function CitiesSearch({
             const results = await getGeocode({ address: description });
             const { lat, lng } = await getLatLng(results[0]);
 
-            onSelectCity({ 
-                name: description, 
-                lat, 
-                lng, 
-                days: diffDays, // Enviamos o total de dias calculado
-                activities: [] 
+            const emptyActivitiesByDay = Array.from({ length: diffDays }, () => []);
+            onSelectCity({
+                name: description,
+                lat,
+                lng,
+                days: diffDays,
+                activities: emptyActivitiesByDay // Passamos a matriz inicializada
             });
 
-            // Limpa tudo
-            setValue('');
-            setStartDate('');
-            setEndDate('');
-        } else {
-            alert("Por favor, selecione o período da viagem.");
-        }
-    };
+                // Limpa tudo
+                setValue('');
+                setStartDate('');
+                setEndDate('');
+            } else {
+                alert("Por favor, selecione o período da viagem.");
+            }
+        };
 
     return (
         <div className="relative w-full max-w-xl">
