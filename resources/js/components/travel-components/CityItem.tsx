@@ -1,14 +1,24 @@
 import usePlacesAutocomplete from "use-places-autocomplete";
 import { useState } from "react";
 import { City } from "./City";
+import { Activity } from "./Activity";
 
 interface CityItemProps {
     city: City;
     // Atualizado para receber o índice do dia
-    onAddActivity: (dayIndex: number, activity: string) => void;
+    onAddActivity: (dayIndex: number, activity: Activity) => void;
     onRemoveActivity: (dayIndex: number, activityIndex: number) => void;
     onRemoveCity: () => void;
 }
+
+const Prices = {
+    0: ["Grátis", { min: 0, max: 0 }],
+    1: ["R$20-50", { min: 20, max: 50 }],
+    2: ["R$60-100", { min: 60, max: 100 }],
+    3: ["R$110-200", { min: 110, max: 200 }],
+    4: ["R$200+", { min: 200, max: 1000 }],
+    "unknown": ["Preço não informado", { min: 0, max: 0 }] // Chave de segurança
+} as const;
 
 export default function CityItem({ city, onAddActivity, onRemoveActivity, onRemoveCity }: CityItemProps) {
     // Estado para controlar qual dia (aba) está selecionado. Começa no dia 0 (Dia 1)
@@ -32,6 +42,48 @@ export default function CityItem({ city, onAddActivity, onRemoveActivity, onRemo
         },
         debounce: 300,
     });
+
+    // Dentro do CityItem.tsx, antes do return
+    const handlePlaceSelect = (placeId: string) => {
+        if (!window.google) return;
+
+        const service = new google.maps.places.PlacesService(document.createElement('div'));
+
+        service.getDetails(
+            {
+                placeId: placeId,
+                fields: ['name', 'rating', 'price_level', 'formatted_address', 'place_id']
+            },
+            (place, status) => {
+                if (status === google.maps.places.PlacesServiceStatus.OK && place) {
+
+                    // 1. Validar se o price_level existe e se está mapeado no seu objeto Prices
+                    // O Google retorna 0-4, mas locais sem dados retornam undefined.
+                    const googlePrice = place.price_level;
+
+                    // Verificamos se googlePrice é um número e se existe como chave em Prices
+                    const hasValidPrice = typeof googlePrice === 'number' && googlePrice in Prices;
+
+                    // Se não for válido, usamos a chave 0 (Grátis/Desconhecido) como fallback
+                    const safePriceKey = hasValidPrice ? (googlePrice as keyof typeof Prices) : 0;
+
+                    const newActivity: Activity = {
+                        place_id: place.place_id || "",
+                        name: place.name || "",
+                        rating: place.rating,
+                        priceLevel: googlePrice, // Mantemos o valor original (pode ser undefined)
+                        // 2. Agora o acesso ao índice [1] é seguro, pois safePriceKey sempre existe
+                        cost: Prices[safePriceKey][1],
+                        address: place.formatted_address,
+                    };
+
+                    onAddActivity(activeDay, newActivity);
+                    setValue("");
+                    clearSuggestions();
+                }
+            }
+        );
+    };
 
     return (
         <div className="bg-slate-800 p-4 rounded-lg border-l-4 border-blue-500 shadow-md transition-all">
@@ -86,10 +138,8 @@ export default function CityItem({ city, onAddActivity, onRemoveActivity, onRemo
                             <li
                                 key={place_id}
                                 onClick={() => {
-                                    // Adiciona a atividade no dia ATIVO
-                                    onAddActivity(activeDay, description);
-                                    setValue("");
-                                    clearSuggestions();
+                                    // CORREÇÃO: Chama a função que busca detalhes em vez de onAddActivity direto
+                                    handlePlaceSelect(place_id);
                                 }}
                                 className="p-2 text-xs hover:bg-slate-600 cursor-pointer border-b border-slate-600 last:border-none"
                             >
@@ -108,22 +158,45 @@ export default function CityItem({ city, onAddActivity, onRemoveActivity, onRemo
                 </p>
 
                 <div className="flex flex-col gap-2">
-                    {/* Usamos o ?. para verificar se o dia e as atividades existem com segurança */}
-                    {city.day_array?.[activeDay]?.activities && city.day_array[activeDay].activities.length > 0 ? (
-                        city.day_array[activeDay].activities.map((act, idx) => (
-                            <div
-                                key={idx}
-                                className="bg-slate-900 text-slate-300 text-xs px-3 py-2 rounded border border-slate-700 flex items-center justify-between group"
+                    {/* --- Dentro da LISTA DE ATIVIDADES --- */}
+                {city.day_array?.[activeDay]?.activities.map((act, idx) => (
+                    <div
+                        key={idx}
+                        className="bg-slate-900 text-slate-300 p-3 rounded border border-slate-700 flex flex-col gap-1 group"
+                    >
+                        <div className="flex items-center justify-between">
+                            <span className="font-bold text-blue-400 truncate pr-2">
+                                {act.name}
+                            </span>
+                            <button
+                                onClick={() => onRemoveActivity(activeDay, idx)}
+                                className="text-slate-500 hover:text-red-500 transition-colors"
                             >
-                                <span className="truncate pr-2">{act.name?.split(',')[0]}</span>
-                                <button onClick={() => onRemoveActivity(activeDay, idx)} className="bg-red-500 px-2 py-1 rounded text-xs">X</button>
-                            </div>
-                        ))
-                    ) : (
-                        <p className="text-xs text-slate-600 italic text-center py-2">
-                            Nenhuma atividade neste dia.
-                        </p>
-                    )}
+                                ✕
+                            </button>
+                        </div>
+
+                        {/* Exibição de Rating e Preço */}
+                        <div className="flex gap-3 text-[10px]">
+                            {act.rating && (
+                                <span className="text-yellow-500 flex items-center gap-0.5">
+                                    ★ {act.rating}
+                                </span>
+                            )}
+                            {act.priceLevel !== undefined && (
+                                <span className="text-green-500">
+                                    {"$".repeat(act.priceLevel || 1)}
+                                </span>
+                            )}
+                        </div>
+
+                        {act.address && (
+                            <span className="text-[10px] text-slate-500 truncate">
+                                {act.address}
+                            </span>
+                        )}
+                    </div>
+                ))}
                 </div>
             </div>
         </div>
