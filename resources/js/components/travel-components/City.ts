@@ -5,5 +5,5 @@ export interface City {
     lat: number;
     lng: number;
     days: number;
-    day_array: Day[];
+    day_array: Day[] | [];
 }

@@ -51,7 +51,7 @@ export default function CitiesSearch({
                 lat,
                 lng,
                 days: diffDays,
-                activities: emptyActivitiesByDay // Passamos a matriz inicializada
+                day_array: []
             });
 
                 // Limpa tudo
