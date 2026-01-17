@@ -37,23 +37,11 @@ export default function CitiesSearch({ onSelectCity }: { onSelectCity: (cityData
             lat, lng, days: diffDays,
             day_array: Array.from({ length: diffDays }, () => ({ activities: [] }))
         });
-
-            const emptyActivitiesByDay = Array.from({ length: diffDays }, () => []);
-            onSelectCity({
-                name: description,
-                lat,
-                lng,
-                days: diffDays,
-                day_array: Array.from({ length: diffDays }, () => ({
-                    activities: []
-                }))
-            });
-
-                // Limpa tudo
-                setValue('');
-                setStartDate('');
-                setEndDate('');
-            };
+            // Limpa tudo
+        setValue('');
+        setStartDate('');
+        setEndDate('');
+    };
 
     return (
         <div className="relative w-full z-30">
