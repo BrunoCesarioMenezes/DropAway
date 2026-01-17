@@ -53,10 +53,7 @@ export default function CitiesSearch({ onSelectCity }: { onSelectCity: (cityData
                 setValue('');
                 setStartDate('');
                 setEndDate('');
-            } else {
-                alert("Por favor, selecione o período da viagem.");
-            }
-        };
+            };
 
     return (
         <div className="relative w-full z-30">
