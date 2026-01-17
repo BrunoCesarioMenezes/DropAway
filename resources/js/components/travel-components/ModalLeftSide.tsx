@@ -3,29 +3,28 @@ import CitiesSearch from "./CitiesSearch";
 import { City } from "./City";
 import CityItem from "./CityItem";
 import imagemLanding from '../../pages/img/landing_page.png';
+import { Activity } from "./Activity";
 
 export default function ModalLeftSide({ isLoaded, handleCitySelection, selectedCities, setSelectedCities }: { isLoaded: boolean, handleCitySelection: (cityData: City) => void, selectedCities: City[], setSelectedCities: (cities: City[]) => void }) {
 
     // Agora recebe também o dayIndex
-    const handleAddActivity = ({ cityIndex, dayIndex, activityName }: { cityIndex: number, dayIndex: number, activityName: string }) => {
-        const updatedCities = selectedCities.map((city, i) => {
+    // No ModalLeftSide.tsx
+    const handleAddActivity = ({ cityIndex, dayIndex, activity }: {
+        cityIndex: number,
+        dayIndex: number,
+        activity: Activity
+    }) => {
+        const updatedCities : City[] = selectedCities.map((city, i) => {
             if (i === cityIndex) {
-                // 1. Clona o array de dias (day_array)
                 const newDayArray = [...city.day_array];
-
-                // 2. Clona o dia específico e adiciona a nova atividade
                 if (newDayArray[dayIndex]) {
                     newDayArray[dayIndex] = {
                         ...newDayArray[dayIndex],
-                        activities: [...newDayArray[dayIndex].activities, { name: activityName }]
+                        // Adiciona o objeto activity completo
+                        activities: [...newDayArray[dayIndex].activities, activity]
                     };
                 }
-
-                // 3. RETORNO CORRETO: Atualiza 'day_array', não 'activities'
-                return {
-                    ...city,
-                    day_array: newDayArray // Antes estava 'activities: newActivitiesMatrix'
-                };
+                return { ...city, day_array: newDayArray };
             }
             return city;
         });
@@ -68,13 +67,13 @@ export default function ModalLeftSide({ isLoaded, handleCitySelection, selectedC
                     </div>
                 )}
 
-                <div className="pt-4 pb-12 w-full h-56 overflow-y-auto space-y-4 pr-2 custom-scrollbar">
+                <div className="my-4 pb-8 w-full h-56 overflow-y-auto space-y-4 pr-2 custom-scrollbar">
                     <p className="text-sm text-slate-400">Seu Roteiro:</p>
                     {selectedCities.map((city, i) => (
                         <CityItem
                             key={i}
                             city={city}
-                            onAddActivity={(dayIndex, activity) => handleAddActivity({ cityIndex: i, dayIndex, activityName: activity })}
+                            onAddActivity={(dayIndex, activity) => handleAddActivity({ cityIndex: i, dayIndex, activity: activity })}
                             onRemoveActivity={(dayIdx, actIdx) => handleRemoveActivity(i, dayIdx, actIdx)}
                             onRemoveCity={() => setSelectedCities(selectedCities.filter((_, index) => index !== i))}
                         />
