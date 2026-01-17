@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -9,15 +10,13 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class TripFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
-            //
+            'name' => fake()->sentence(3), // Ex: "Férias de Verão 2024"
+            'days' => fake()->numberBetween(3, 20),
+            // Cria um usuário novo se não for passado um id
+            'user_id' => User::factory(), 
         ];
     }
 }
