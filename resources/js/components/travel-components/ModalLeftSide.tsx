@@ -1,16 +1,30 @@
 import { useState } from "react";
 import CitiesSearch from "./CitiesSearch";
 import { City } from "./City";
+import CityItem from "./cityItem";
 import imagemLanding from '../../pages/img/landing_page.png';
 
-export default function ModalLeftSide( {isLoaded, handleCitySelection, selectedCities, setSelectedCities} : {isLoaded: boolean, handleCitySelection: (cityData: City) => void, selectedCities: City[], setSelectedCities: (cities: City[]) => void} ) {
-    return (
-        <div>
-            <img className="w-64 h-auto mb-8 rounded-lg" src={imagemLanding} alt="Landing" />
+export default function ModalLeftSide({ isLoaded, handleCitySelection, selectedCities, setSelectedCities }: { isLoaded: boolean, handleCitySelection: (cityData: City) => void, selectedCities: City[], setSelectedCities: (cities: City[]) => void }) {
+    
+    const handleAddActivity = (index: number, activityName: string) => {
+        const updatedCities = selectedCities.map((city, i) => {
+            if (i === index) {
+                return {
+                    ...city,
+                    activities: [...city.activities, activityName] 
+                };
+            }
+            return city;
+        });
+        setSelectedCities(updatedCities);
+    };
 
+    return (
+        <div className="text-white p-4">
+            <img className="w-64 h-auto mb-8 rounded-lg" src={imagemLanding} alt="Landing" />
             <h2 className="text-2xl font-bold mb-4">Planeje sua Viagem</h2>
 
-            <div className="flex flex-col items-center h-64 min-w-full">
+            <div className="flex flex-col items-center min-w-full">
                 {isLoaded ? (
                     <CitiesSearch onSelectCity={handleCitySelection} />
                 ) : (
@@ -19,17 +33,17 @@ export default function ModalLeftSide( {isLoaded, handleCitySelection, selectedC
                     </div>
                 )}
 
-                <div className="mt-6 w-full overflow-y-auto">
-                    <p className="text-sm text-slate-400 mb-2">Cidades no roteiro:</p>
+                <div className="mt-6 w-full max-h-96 overflow-y-auto space-y-4">
+                    <p className="text-sm text-slate-400">Seu Roteiro:</p>
                     {selectedCities.map((city, i) => (
-                        <div key={i} className="bg-slate-800 flex flex-row gap-2 p-2 mb-2 rounded border-l-4 border-blue-500 text-sm">
-                            <p>{city.name}</p>
-                            <p>{city.days} dias</p>
-                            <button onClick={() => setSelectedCities(selectedCities.filter((_, index) => index !== i))} className="bg-red-600 text-white p-1 ml-2">X</button>
-                        </div>
+                        <CityItem 
+                            key={i} 
+                            city={city} 
+                            onAddActivity={(activity) => handleAddActivity(i, activity)}
+                            onRemoveCity={() => setSelectedCities(selectedCities.filter((_, index) => index !== i))}
+                        />
                     ))}
                 </div>
-
             </div>
         </div>
     );
