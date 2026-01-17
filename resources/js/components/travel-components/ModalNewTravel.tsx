@@ -1,24 +1,12 @@
-import Maps from "./Maps";
-import imagemLanding from '../../pages/img/landing_page.png';
 import { useState } from "react";
 import { useJsApiLoader } from '@react-google-maps/api';
-import CitiesSearch from "./CitiesSearch";
-import { City } from "./City";
+import Maps from "./Maps";
 import ModalLeftSide from "./ModalLeftSide";
-import { show } from "@/routes/two-factor";
+import { City } from "./City";
 
-export default function ModalnewTravel({toggleModal} : {toggleModal: () => void}) {
+export default function ModalnewTravel({ toggleModal }: { toggleModal: () => void }) {
     const [mapCenter, setMapCenter] = useState({ lat: -23.5505, lng: -46.6333 });
     const [selectedCities, setSelectedCities] = useState<City[]>([]);
-
-    const showStructureTravel = () => {
-        console.log("Resumo da viagem: ", selectedCities.map(city =>
-            ({ name: city.name, days: city.day_array.map(day =>
-                ({ activities: day.activities }))
-            })
-        )
-    );
-    }
 
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
@@ -27,109 +15,92 @@ export default function ModalnewTravel({toggleModal} : {toggleModal: () => void}
     });
 
     const handleCitySelection = (cityData: City) => {
-        const newCoords = { lat: cityData.lat, lng: cityData.lng };
-        setMapCenter(newCoords);
+        setMapCenter({ lat: cityData.lat, lng: cityData.lng });
+        setSelectedCities((prev) => [...prev, cityData]);
+    };
 
-        // Criamos uma versão da cidade com o day_array populado
-        const cityWithDays = {
-                ...cityData,
-                // Se cityData.days for 3, cria [{activities: []}, {activities: []}, {activities: []}]
-                day_array: cityData.day_array || Array.from({ length: cityData.days }, () => ({
-                    activities: []
-                }))
-            };
-
-            setSelectedCities((prev) => [...prev, cityWithDays]);
-            console.log("Cidade adicionada com estrutura de dias:", cityWithDays);
-        };
+    const showStructureTravel = () => {
+        console.log("Resumo da viagem:", selectedCities);
+    };
 
     return (
-        <div className="fixed inset-0 flex flex-col z-10 w-[calc(100vw-2rem)] h-[calc(100vh-2rem)] bg-blue-800 m-auto rounded-xl overflow-hidden shadow-2xl">
-            <button onClick={toggleModal} className="absolute top-4 left-4 z-50 p-2 bg-red-600 text-white rounded-full hover:bg-red-500 shadow-lg">✕</button>
-            <button onClick={showStructureTravel} className="absolute w-20 h-auto top-5 right-30 z-[200] bg-amber-400">Estrutura da viagem</button>
+        <div className="fixed inset-0 flex z-50 w-screen h-screen bg-slate-950 overflow-hidden">
+            
+            {/* Esquerda: Painel de Controle */}
+            {/* Aumentamos de 450px para 500px para acomodar melhor os inputs de data horizontais */}
+            <div className="w-[700px] min-w-[700px] h-full bg-slate-900 shadow-2xl z-20 flex flex-col border-r border-slate-800 transition-all">
+                
+                {/* Cabeçalho do Painel */}
+                <div className="p-4 flex justify-between items-center bg-slate-900/50 backdrop-blur-sm border-b border-slate-800">
+                    <button 
+                        onClick={toggleModal} 
+                        className="p-2 bg-slate-800 text-white rounded-full hover:bg-red-600 transition-all hover:scale-105 active:scale-95"
+                    >
+                        ✕
+                    </button>
+                    <button 
+                        onClick={showStructureTravel} 
+                        className="text-[10px] font-bold bg-amber-500 px-4 py-1.5 rounded-full text-black hover:bg-amber-400 transition-colors shadow-lg"
+                    >
+                        LOG ESTRUTURA
+                    </button>
+                </div>
 
-            <div className="grid grid-cols-2 h-full">
-                <div className="flex flex-col items-center col-span-1 p-8 bg-slate-900 text-white relative z-20 shadow-[15px_0_30px_-5px_rgba(0,0,0,0.5)]">
+                {/* Área de Conteúdo (CitiesSearch + Roteiro) */}
+                <div className="flex-1 overflow-hidden">
                     <ModalLeftSide
                         isLoaded={isLoaded}
                         handleCitySelection={handleCitySelection}
                         selectedCities={selectedCities}
                         setSelectedCities={setSelectedCities}
-                    >
-                    </ModalLeftSide>
-                </div>
-
-                <div className="relative z-10 col-span-1 w-full h-full bg-slate-200 overflow-hidden">
-                    {/* O Mapa */}
-                    <Maps isLoaded={isLoaded} center={mapCenter} markers={selectedCities} />
-
-                    {/* Legenda Fixa no Canto Inferior Esquerdo */}
-                    <div className="absolute bottom-20 left-6 z-[100] min-w-[160px] bg-slate-900/90 backdrop-blur-sm text-white p-4 rounded-lg border border-slate-700 shadow-2xl pointer-events-auto">
-                        <h3 className="font-bold text-sm mb-1 border-b border-slate-700 pb-1">
-                            Estatísticas da Viagem
-                        </h3>
-                        <div className="flex flex-col gap-2 mt-2">
-                            <div className="flex items-center gap-2">
-                                <span className="text-[10px] text-slate-300">Cidades visitadas: {selectedCities.length}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <span className="text-[10px] text-slate-300">
-                                    Total de dias: {selectedCities.reduce((total, city) => total + city.days, 0)}
-                                </span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <span className="text-[10px] text-slate-300">
-                                    Lugares visitados: {selectedCities.reduce((cityAcc, city) =>
-                                        cityAcc + city.day_array.reduce((dayAcc, day) =>
-                                            dayAcc + day.activities.length, 0), 0)}
-                                </span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <span className="text-[10px] text-slate-300">
-                                    Custo estimado: R${selectedCities.reduce((cityAcc, city) =>
-                                        cityAcc + city.day_array.reduce((dayAcc, day) =>
-                                            dayAcc + day.activities.reduce((actAcc, act) =>
-                                                actAcc + ((act.cost?.max || 0)), 0), 0), 0).toFixed(2)}
-                                </span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <span className="text-[10px] text-slate-300">
-                                    Total de quilômetros: {(() => {
-                                        const R = 6371; // Raio da Terra em km
-                                        let totalDistance = 0;
-
-                                        const toRad = (value: number) => (value * Math.PI) / 180;
-
-                                        const allPoints = selectedCities.map(city => ({ lat: city.lat, lng: city.lng }));
-
-                                        for (let i = 0; i < allPoints.length - 1; i++) {
-                                            const lat1 = allPoints[i].lat;
-                                            const lon1 = allPoints[i].lng;
-                                            const lat2 = allPoints[i + 1].lat;
-                                            const lon2 = allPoints[i + 1].lng;
-
-                                            const dLat = toRad(lat2 - lat1);
-                                            const dLon = toRad(lon2 - lon1);
-
-                                            const a =
-                                                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                                                Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-                                                Math.sin(dLon / 2) * Math.sin(dLon / 2);
-                                            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-                                            const distance = R * c;
-
-                                            totalDistance += distance;
-                                        }
-
-                                        return totalDistance.toFixed(2);
-                                    })()} km
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+                    />
                 </div>
             </div>
 
+            {/* Direita: Mapa e Estatísticas */}
+            <div className="flex-1 relative bg-slate-200 h-full">
+                <Maps isLoaded={isLoaded} center={mapCenter} markers={selectedCities} />
+
+                {/* Dashboard flutuante de Estatísticas */}
+                <div className="absolute bottom-6 left-6 z-10 bg-slate-900/95 backdrop-blur-md p-5 rounded-2xl border border-slate-700 shadow-2xl text-white min-w-[220px]">
+                    <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4 border-b border-slate-800 pb-2">
+                        Resumo da Viagem
+                    </h3>
+                    
+                    <div className="space-y-3">
+                        <StatItem label="Cidades" value={selectedCities.length} />
+                        
+                        <StatItem 
+                            label="Total Dias" 
+                            value={selectedCities.reduce((acc, c) => acc + c.days, 0)} 
+                        />
+                        
+                        <StatItem 
+                            label="Atividades" 
+                            value={selectedCities.reduce((acc, c) => 
+                                acc + c.day_array.reduce((dAcc, d) => dAcc + d.activities.length, 0), 0)
+                            } 
+                        />
+                        
+                        <StatItem 
+                            label="Estimativa" 
+                            value={`R$ ${selectedCities.reduce((acc, c) => 
+                                acc + c.day_array.reduce((dAcc, d) => 
+                                    dAcc + d.activities.reduce((aAcc, a) => 
+                                        aAcc + (a.cost?.max || 0), 0), 0), 0).toFixed(0)}`} 
+                        />
+                    </div>
+                </div>
+            </div>
         </div>
     );
-};
+}
+
+function StatItem({ label, value }: { label: string, value: string | number }) {
+    return (
+        <div className="flex justify-between items-center gap-6">
+            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{label}</span>
+            <span className="text-sm font-mono text-blue-400 font-black">{value}</span>
+        </div>
+    );
+}
