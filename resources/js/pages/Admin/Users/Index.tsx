@@ -1,5 +1,7 @@
 import { Link } from '@inertiajs/react';
 import { HomeIcon, UserIcon } from '@heroicons/react/24/solid'
+import { useState } from 'react';
+import EditModal from '@/components/user/EditModal';
 
 type User = {
     id: number;
@@ -12,7 +14,12 @@ interface Props {
     users: User[];
 }
 
+
+
 export default function Index({ users }: Props) {
+
+    const [editModalVisible, setEditModalVisible] = useState<User | null>(null)
+
     return (
         <div className="flex min-h-screen items-center justify-center bg-[#180C02] p-5">
             <div className="w-full rounded-2xl bg-[#362312] pt-6 pb-10 pl-5 pr-5">
@@ -21,8 +28,8 @@ export default function Index({ users }: Props) {
                     <div className='flex gap-2'>
                         <a href="" className="bg-[#03989E] hover:bg-teal-600 text-white px-4 py-2 rounded-lg font-bold flex items-center gap-2 {{ request('type', 'drivers') === 'drivers' ? '' : 'hidden' }}">
                         Novo Motorista
-                    </a>    
-                        
+                    </a>
+
                     </div>
                     <h1 className="text-center text-2xl font-semibold text-white ">
                         Gerenciamento de Usuários
@@ -91,12 +98,12 @@ export default function Index({ users }: Props) {
                                     {/* Ações */}
                                     <td className=''>
                                         <div className="flex gap-3 items-center justify-center">
-                                            <Link
-                                                href={`/admin/users/${user.id}/edit`}
+                                            <button
+                                                onClick={() => setEditModalVisible(user)}
                                                 className="text-sm font-semibold text-[#3b1f0b] hover:underline"
                                             >
                                                 Editar
-                                            </Link>
+                                            </button>
 
                                             <Link
                                                 href={`/admin/users/${user.id}`}
@@ -112,6 +119,7 @@ export default function Index({ users }: Props) {
                                                 Remover
                                             </Link>
                                         </div>
+
                                     </td>
                                 </tr>
                             ))}
@@ -122,7 +130,13 @@ export default function Index({ users }: Props) {
 
             </div>
             {/* Fim do Card Principal */}
-
+            {editModalVisible && (
+                <EditModal
+                    user={editModalVisible}
+                    onClose={() => setEditModalVisible(null)}
+                />
+            )}
         </div>
     );
+
 }
