@@ -1,6 +1,9 @@
 import { GoogleMap, Marker, Polyline } from '@react-google-maps/api';
 
-const containerStyle = { width: '100%', height: '100%' };
+const containerStyle = {
+    width: '100%',
+    height: '100%',
+};
 
 export default function Maps({isLoaded, markers, center}
     : {isLoaded: boolean, markers: unknown[], center: {lat: number, lng: number}}) {
