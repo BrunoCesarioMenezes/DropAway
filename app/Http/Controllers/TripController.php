@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Inertia\Inertia;
 use App\Models\Trip;
+use App\Models\City;
 use App\Http\Requests\StoreTripRequest;
 use App\Http\Requests\UpdateTripRequest;
 
@@ -13,16 +14,12 @@ class TripController extends Controller
      */
     public function index()
     {
-        // Busca os dados (isso já está funcionando)
-        $trips = auth()->user()->trips()
-            ->with('cities')
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $user = current_user();
+        $trips = Trip::where('user_id', $user->id)
+                ->with('cities')
+                ->orderBy('created_at', 'desc')
+                ->get();
 
-        // ERRO ATUAL: return response()->json($trips);
-
-        // CORREÇÃO: Renderizar o componente React
-        // Nota: Baseado no seu web.php anterior, seu componente parece estar em 'User/Travels'
         return Inertia::render('User/Travels', [
             'trips' => $trips
         ]);
@@ -41,7 +38,50 @@ class TripController extends Controller
      */
     public function store(StoreTripRequest $request)
     {
-        //
+        $user = current_user();
+
+        $trip = new Trip();
+        $trip->user_id = $user->id;
+        $trip->name = 'Nova Viagem';
+        $days = 0;
+
+        $cities = $request->input('selectedCities', []);
+
+        foreach ($cities as $cityData => $city) {
+            $day_array = $city['day_array'];
+            $days += count($day_array);
+        }
+
+        $trip->days = $days;
+        $trip->save();
+
+        foreach ($cities as $cityData ) {
+            $city = $trip->cities()->create([
+                'name' => $cityData['name'],
+                'lat' => $cityData['lat'],
+                'lng' => $cityData['lng'],
+                'start_day' => now(),
+                'end_day' => now(),
+            ]);
+
+            $day_array = $cityData['day_array'];
+
+            foreach ($day_array as $index => $day) {
+                foreach ($day['activities'] as $activityData) {
+                    $city->activities()->create([
+                        'place_id' => $activityData['place_id'],
+                        'day_index' => $index,
+                        'name' => $activityData['name'],
+                        'rating' => $activityData['rating'],
+                        'cost' => $activityData['cost'],
+                        'priceLevel' => $activityData['priceLevel'] ?? null,
+                        'address' => $activityData['address'],
+                    ]);
+                }
+            }
+        }
+
+        return redirect()->route('travels.index');
     }
 
     /**
@@ -74,7 +114,10 @@ class TripController extends Controller
     public function destroy($id)
     {
         // Encontra a viagem do usuário logado ou falha
-        $trip = auth()->user()->trips()->findOrFail($id);
+        $user = current_user();
+        $trip = Trip::where('id', $id)
+                ->where('user_id', $user->id)
+                ->firstOrFail();
 
         $trip->delete();
 

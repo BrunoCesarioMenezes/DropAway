@@ -12,12 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('activities', function (Blueprint $table) {
-            $table->id();
+            $table->id(); // Use um ID incremental padrão
+            $table->string('place_id'); // O ID do Google entra aqui
+            $table->integer('day_index')->default(0);
             $table->string('name');
-            $table->text('description');
             $table->foreignId('city_id')->constrained()->onDelete('cascade');
-            $table->float('rating');
-            $table->string('cost');
+            $table->float('rating')->nullable(); // O Google às vezes não retorna rating
+            $table->integer('priceLevel')->nullable();
+            $table->json('cost'); // Mude para JSON para aceitar o objeto {min, max}
+            $table->string('address')->nullable();
             $table->timestamps();
         });
     }

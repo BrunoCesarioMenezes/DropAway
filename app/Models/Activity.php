@@ -11,10 +11,16 @@ class Activity extends Model
     use HasFactory;
 
     protected $fillable = [
+        'place_id',
+        'day_index',
         'name',
-        'description',
-        'city_id',
         'rating',
         'cost',
+        'priceLevel',
+        'address',
+    ];
+
+    protected $casts = [
+        'cost' => 'array', // Converte o Array do PHP para JSON ao salvar e vice-versa
     ];
 }

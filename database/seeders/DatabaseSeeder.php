@@ -39,18 +39,18 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 20 usuários fake (apenas usuários comuns)
-        User::factory()->count(20)->create();
-        Trip::factory(5)
-        ->create()
-        ->each(function ($trip) {
-            // Para cada viagem, cria 3 cidades
-            City::factory(3)
-                ->create(['trip_id' => $trip->id])
-                ->each(function ($city) {
-                    // Para cada cidade, cria 4 atividades
-                    Activity::factory(4)->create(['city_id' => $city->id]);
-                });
-        });
+        // // 20 usuários fake (apenas usuários comuns)
+        // User::factory()->count(20)->create();
+        // Trip::factory(5)
+        // ->create()
+        // ->each(function ($trip) {
+        //     // Para cada viagem, cria 3 cidades
+        //     City::factory(3)
+        //         ->create(['trip_id' => $trip->id])
+        //         ->each(function ($city) {
+        //             // Para cada cidade, cria 4 atividades
+        //             Activity::factory(4)->create(['city_id' => $city->id]);
+        //         });
+        // });
     }
 }
