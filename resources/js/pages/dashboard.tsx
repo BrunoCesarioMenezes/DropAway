@@ -1,6 +1,5 @@
 import { PlaceholderPattern } from '@/components/laravel-defaults/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
-import { dashboard } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
 import { Head, router, usePage } from '@inertiajs/react';
 import NavbarAdm from '../components/NavbarAdm';
@@ -15,7 +14,7 @@ export default function Dashboard() {
             <div className="w-screen h-screen bg-[#362312] pt-6 pb-10 pl-5 pr-5">
                 {user.role === 'admin' ? (
                     //ADMIN
-                    
+
                     <div>
                         <NavbarAdm></NavbarAdm>
                         <div className='flex flex-col pt-20 px-6'>
@@ -54,12 +53,12 @@ export default function Dashboard() {
                             </tbody>
                         </table>
 
-                       
+
                         </div>
 
                     </div>
-                ) : 
-                
+                ) :
+
                 //USUÀRIO
                 (
                     <div>

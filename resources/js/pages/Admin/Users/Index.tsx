@@ -1,8 +1,12 @@
+import { HomeIcon, UserIcon } from '@heroicons/react/24/solid'
 import { useState } from 'react';
 import { Link, router } from '@inertiajs/react';
-import { HomeIcon, UserIcon } from '@heroicons/react/24/solid';
-import CreateUserModal from './Create';
 import NavbarAdm from '@/components/NavbarAdm';
+import EditModal from '@/components/user/EditModal';
+import CreateUserModal from '../../../components/user/CreateModal';
+import DeleteModal from '@/components/user/DeleteModal'
+
+
 type User = {
     id: number;
     name: string;
@@ -15,20 +19,23 @@ interface Props {
 }
 
 export default function Index({ users }: Props) {
-    const [open, setOpen] = useState(false);
+
+    const [createVisible, setCreateVisible] = useState(false);
+    const [editModalVisible, setEditModalVisible] = useState<User | null>(null)
+    const [deleteModalVisible, setDeleteModalVisible] = useState<User | null>(null)
 
     return (
         <div className="flex min-h-screen items-center justify-center">
-            <NavbarAdm></NavbarAdm> 
+            <NavbarAdm></NavbarAdm>
             <div className="pt-20 px-6 w-full bg-[#362312] pt-6 pb-10 pl-5 pr-5">
 
                 {/* Header */}
                 <div className="flex w-full items-center justify-between border-b-2 border-white pb-5">
                     <button
-                        onClick={() => setOpen(true)}
-                        className="bg-[#03989E] hover:bg-teal-600 text-white px-4 py-2 rounded-lg font-bold"
+                        onClick={() => setCreateVisible(true)}
+                        className="bg-transparent hover:bg-[#f5c47a] hover:text-black hover:border-transparent border-2 border-white text-white px-2 py-2 rounded-lg font-bold hover:cursor-pointer"
                     >
-                        Novo Usuário
+                       + Novo Usuário
                     </button>
 
                     <h1 className="text-2xl font-semibold text-white">
@@ -83,39 +90,65 @@ export default function Index({ users }: Props) {
                                     )}
                                 </td>
 
-                                <td className="text-center">{user.name}</td>
-                                <td className="text-center">{user.email}</td>
+                                    {/* Nome */}
+                                    <td className=' text-center'>
+                                        {user.name}
+                                    </td>
 
-                                <td>
-                                    <div className="flex justify-center gap-3">
-                                        <Link
-                                            href={`/admin/users/${user.id}/edit`}
-                                            className="font-semibold hover:underline"
-                                        >
-                                            Editar
-                                        </Link>
+                                    {/* Email */}
+                                    <td className=' text-center'>
+                                        {user.email}
+                                    </td>
 
-                                        <Link
-                                            href={`/admin/users/${user.id}`}
-                                            method="delete"
-                                            as="button"
-                                            onBefore={() =>
-                                                confirm('Deseja remover este usuário?')
-                                            }
-                                            className="font-semibold text-red-700 hover:underline"
-                                        >
-                                            Remover
-                                        </Link>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                                    {/* Ações */}
+                                    <td className=''>
+                                        <div className="flex gap-3 items-center justify-center">
 
-                {/* MODAL */}
-                <CreateUserModal open={open} onClose={() => setOpen(false)} />
-            </div>
+                                            {/* Editar */}
+                                            <button
+                                                onClick={() => setEditModalVisible(user)}
+                                                className="text-sm font-semibold text-[#3b1f0b] hover:underline hover:cursor-pointer"
+                                            >
+                                                Editar
+                                            </button>
+
+                                            {/* Remover */}
+                                            <button
+                                                onClick={() => setDeleteModalVisible(user)}
+                                                className="text-sm font-semibold text-red-700 hover:underline hover:cursor-pointer"
+                                            >
+                                                Remover
+                                            </button>
+
+                                        </div>
+
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+                {/* Fim da Tabela */}
+
+            {/* MODAL CRIAR */}
+            <CreateUserModal
+                open={createVisible}
+                onClose={() => setCreateVisible(false)} />
+            {/* MODAL EDITAR */}
+            {editModalVisible && (
+                <EditModal
+                    user={editModalVisible}
+                    onClose={() => setEditModalVisible(null)}
+                />
+            )}
+            {/* MODAL EXCLUIR */}
+            {deleteModalVisible && (
+                <DeleteModal
+                    user={deleteModalVisible}
+                    onClose={() => setDeleteModalVisible(null)}
+                />
+            )}
         </div>
     );
+
 }
