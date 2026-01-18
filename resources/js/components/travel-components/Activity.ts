@@ -5,5 +5,4 @@ export interface Activity{
     priceLevel?: number;
     cost: {min: number, max: number};
     address?: string;
-    photoUrl?: string;
 }

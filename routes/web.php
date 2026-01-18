@@ -28,6 +28,12 @@ Route::middleware(UserMiddleware::class)->group(function () {
     Route::post('/travels', [TripController::class, 'store'])
         ->name('travels.store');
 
+    Route::get('/travels/{trip}/edit', [TripController::class, 'edit'])
+        ->name('travels.edit');
+
+    Route::put('/travels/{trip}', [TripController::class, 'update'])
+        ->name('travels.update');
+
     // 3. EXCLUIR VIAGEM (Botão de Lixeira)
     Route::delete('/travels/{id}', [TripController::class, 'destroy'])
         ->name('travels.destroy');

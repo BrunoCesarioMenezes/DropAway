@@ -17,7 +17,16 @@ export default function Travels({ trips }: { trips: Trip[] }) {
     // Remova: useEffect(...) -> Não precisa mais!
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedTripId, setSelectedTripId] = useState<number | null>(null);
     const toggleModal = () => setIsModalOpen(!isModalOpen);
+    const logout = () => {
+        router.post('/logout');
+    }
+
+    const handleEdit = (tripID : number) => {
+        setSelectedTripId(tripID);
+        setIsModalOpen(true);
+    }
 
     // MUDANÇA 2: Use o router do Inertia para deletar
     const handleDelete = (id: number) => {
@@ -57,6 +66,7 @@ export default function Travels({ trips }: { trips: Trip[] }) {
                 {trips && trips.map((trip) => (
                     <div key={trip.id} className="relative flex flex-col justify-between h-64 bg-slate-900 rounded-xl p-6 shadow-lg border border-slate-800">
                         <div>
+                            <span>{trip.id}</span>
                             <h3 className="text-xl font-bold text-white">{trip.name}</h3>
                             <span className="bg-blue-900/50 text-blue-200 text-xs px-2 py-1 rounded mt-2 inline-block">
                                 Planejada
@@ -70,7 +80,7 @@ export default function Travels({ trips }: { trips: Trip[] }) {
                         </div>
 
                         <div className="flex gap-2 mt-4 pt-4 border-t border-slate-800">
-                            <button className="flex-1 px-3 py-2 bg-slate-800 hover:bg-slate-700 rounded text-blue-400 text-sm">
+                            <button onClick={() => {handleEdit(trip.id)}} className="flex-1 px-3 py-2 bg-slate-800 hover:bg-slate-700 rounded text-blue-400 text-sm">
                                 Visualizar
                             </button>
                             <button
@@ -84,8 +94,13 @@ export default function Travels({ trips }: { trips: Trip[] }) {
                 ))}
             </div>
 
+            <button className="bg-red-500 px-2 py-1 w-32 self-start mt-4" onClick={logout}>Logout</button>
+
             {isModalOpen && (
-                <ModalnewTravel toggleModal={toggleModal} />
+                <ModalnewTravel
+                    toggleModal={toggleModal}
+                    tripID={selectedTripId}
+                />
             )}
         </div>
     );
