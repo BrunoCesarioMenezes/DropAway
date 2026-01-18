@@ -2,7 +2,7 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Head, router, usePage, Link } from '@inertiajs/react';
 const navigation = [
-{ name: 'Dashboard', href: '/dashboard' }, // Exemplo de rota
+{ name: 'Dashboard', href: '/admin/dashboard' }, // Exemplo de rota
   { name: 'Tabela de Usuários', href: '/admin/users' },
 
 ]
