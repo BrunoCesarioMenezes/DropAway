@@ -41,7 +41,7 @@ export default function CityItem({ city, onAddActivity, onRemoveActivity, onRemo
         requestOptions: {
             types: ['establishment'],
             location: new google.maps.LatLng(city.lat, city.lng),
-            radius: 20000,
+            radius: 10000,
         },
         debounce: 300,
         cache: 0,

@@ -18,7 +18,12 @@ export default function Travels({ trips }: { trips: Trip[] }) {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedTripId, setSelectedTripId] = useState<number | null>(null);
-    const toggleModal = () => setIsModalOpen(!isModalOpen);
+    const toggleModal = () => {
+        if(selectedTripId){
+            setSelectedTripId(null);
+        }
+        setIsModalOpen(!isModalOpen)
+    }
     const logout = () => {
         router.post('/logout');
     }

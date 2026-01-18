@@ -20,6 +20,16 @@ export default function ModalnewTravel({
     const [tripLoaded, setTripLoaded] = useState<Object>('');
     const [isEdit,setIsEdit] = useState(false);
 
+    const emptyModal = () => {
+        setMapCenter({lat:0, lng:0});
+        setMapZoom(6);
+        setSelectedCities([]);
+        setTripName('');
+        setTripLoaded('');
+        setIsEdit(false);
+        toggleModal();
+    }
+
     useEffect(() => {
         if (tripID) {
             axios.get(`/travels/${tripID}/edit`)
