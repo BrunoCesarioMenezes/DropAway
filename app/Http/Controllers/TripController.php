@@ -41,7 +41,6 @@ class TripController extends Controller
     public function store(StoreTripRequest $request)
     {
         $user = current_user();
-
         $trip = new Trip();
         $trip->user_id = $user->id;
         $trip->name = $request->input('tripName');
@@ -80,6 +79,8 @@ class TripController extends Controller
                         'cost' => $activityData['cost'],
                         'priceLevel' => $activityData['priceLevel'] ?? null,
                         'address' => $activityData['address'],
+                        'lat' => $activityData['lat'],
+                        'lng' => $activityData['lng'],
                     ]);
                 }
             }
@@ -142,6 +143,8 @@ class TripController extends Controller
                     'cost' => $activity->cost,
                     'priceLevel' => $activity->priceLevel,
                     'address' => $activity->address,
+                    'lat' => $activity->lat,
+                    'lng' => $activity->lng,
                 ];
             }
 
@@ -203,6 +206,8 @@ class TripController extends Controller
                         'cost' => $activityData['cost'],
                         'priceLevel' => $activityData['priceLevel'] ?? null,
                         'address' => $activityData['address'],
+                        'lat' => $activityData['lat'],
+                        'lng' => $activityData['lng'],
                     ]);
                 }
             }

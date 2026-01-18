@@ -101,6 +101,7 @@ export default function CityItem({ city, onAddActivity, onRemoveActivity, onRemo
     };
 
     const handleActivityCenter = (activity: Activity) => {
+        console.log('tentando', activity);
         if (activity.lat && activity.lng) {
             onSetCenter({ lat: activity.lat, lng: activity.lng });
             onSetZoom(15);

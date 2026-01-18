@@ -18,6 +18,8 @@ class Activity extends Model
         'cost',
         'priceLevel',
         'address',
+        'lat',
+        'lng'
     ];
 
     protected $casts = [

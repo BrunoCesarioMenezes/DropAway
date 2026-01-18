@@ -21,6 +21,8 @@ return new class extends Migration
             $table->integer('priceLevel')->nullable();
             $table->json('cost'); // Mude para JSON para aceitar o objeto {min, max}
             $table->string('address')->nullable();
+            $table->string('lat')->default(0);
+            $table->string('lng')->default(0);
             $table->timestamps();
         });
     }

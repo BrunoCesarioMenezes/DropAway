@@ -13,7 +13,7 @@ export default function ModalnewTravel({
     toggleModal: () => void;
     tripID?: number | null;
 }) {
-    const [mapCenter, setMapCenter] = useState({ lat: -23.5505, lng: -46.6333 });
+    const [mapCenter, setMapCenter] = useState({ lat: 0, lng: 0 });
     const [mapZoom, setMapZoom] = useState(6);
     const [selectedCities, setSelectedCities] = useState<City[]>([]);
     const [tripName, setTripName] = useState('');
@@ -30,10 +30,18 @@ export default function ModalnewTravel({
                     setIsEdit(true);
 
                     if (trip.selectedCities && trip.selectedCities.length > 0) {
-                        const formattedCities = trip.selectedCities.map((city : unknown) => ({
+                        const formattedCities = trip.selectedCities.map((city: any) => ({
                             ...city,
-                            lat: parseFloat(city.lat),
-                            lng: parseFloat(city.lng),
+                            lat: Number(city.lat),
+                            lng: Number(city.lng),
+                            day_array: city.day_array.map((day: any) => ({
+                                ...day,
+                                activities: day.activities.map((act: any) => ({
+                                    ...act,
+                                    lat: Number(act.lat), // Converta aqui também!
+                                    lng: Number(act.lng)
+                                }))
+                            }))
                         }));
 
                         setSelectedCities(formattedCities);
@@ -151,7 +159,13 @@ export default function ModalnewTravel({
             </div>
 
             {/* Direita: Mapa e Estatísticas */}
-            <div className="flex-1 relative bg-slate-200 h-full">
+            <div onWheel={(e) => {
+                if (e.deltaY > 0) {
+                    setMapZoom(prev => prev - 0.5);
+                } else {
+                    setMapZoom(prev => prev + 0.5);
+                }
+}} className="flex-1 relative bg-slate-200 h-full">
                 <Maps isLoaded={isLoaded} center={mapCenter} zoom={mapZoom} markers={selectedCities} />
 
                 {/* Dashboard flutuante de Estatísticas */}
