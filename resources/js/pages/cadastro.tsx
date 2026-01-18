@@ -22,7 +22,7 @@ export default function CreateUser() {
                     </h2>
 
                     <Link
-                        href="/admin/users"
+                        href="/login"
                         className="text-sm text-gray-300 hover:text-white"
                     >
                         Voltar
