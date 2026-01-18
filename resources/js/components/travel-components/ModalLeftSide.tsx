@@ -107,7 +107,7 @@ export default function ModalLeftSide({
                     selectedCities.map((city, i) => (
                         <CityItem
                             // MUDE AQUI: De key={i} para isso 👇
-                            key={`${city.name}-${i}`}
+                            key={`${city.name}-${city.lat}-${city.lng}`}
                             city={city}
                             onAddActivity={(dayIdx, act) =>
                                 handleAddActivity({

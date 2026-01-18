@@ -29,7 +29,6 @@ export default function CityItem({ city, onAddActivity, onRemoveActivity, onRemo
         suggestions: { status, data },
         setValue,
         clearSuggestions,
-        init
     } = usePlacesAutocomplete({
         requestOptions: {
             types: ['establishment'],
@@ -37,8 +36,14 @@ export default function CityItem({ city, onAddActivity, onRemoveActivity, onRemo
             radius: 20000,
         },
         debounce: 300,
-        cacheKey: city.name
+        cache: 0,
     });
+
+    const filteredData = data.filter(suggestion => {
+        const descLower = suggestion.description.toLowerCase().includes(city.name.toLowerCase().split(',')[0]);
+        return descLower;
+    });
+
     const handlePlaceSelect = (placeId: string) => {
         if (!window.google) return;
         const service = new google.maps.places.PlacesService(document.createElement('div'));
@@ -128,7 +133,7 @@ export default function CityItem({ city, onAddActivity, onRemoveActivity, onRemo
                 />
                 {status === "OK" && (
                     <ul className="absolute z-30 w-full bg-slate-700 border border-slate-600 mt-1 rounded-lg shadow-2xl max-h-40 overflow-y-auto">
-                        {data.map(({ place_id, description }) => (
+                        {filteredData.map(({ place_id, description }) => (
                             <li key={place_id} onClick={() => handlePlaceSelect(place_id)} className="p-2 text-[10px] hover:bg-slate-600 cursor-pointer border-b border-slate-600 last:border-none">
                                 <span className="font-bold block text-white">{description.split(',')[0]}</span>
                                 <span className="text-slate-400">{description.split(',').slice(1).join(',')}</span>
