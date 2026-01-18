@@ -7,7 +7,7 @@ interface Trip {
     id: number;
     name: string;
     start_date?: string;
-    // adicione outros campos se necessário
+    end_date?: string;
 }
 
 // MUDANÇA 1: Receba 'trips' aqui nas props
@@ -60,6 +60,12 @@ export default function Travels({ trips }: { trips: Trip[] }) {
                             <h3 className="text-xl font-bold text-white">{trip.name}</h3>
                             <span className="bg-blue-900/50 text-blue-200 text-xs px-2 py-1 rounded mt-2 inline-block">
                                 Planejada
+                            </span>
+                            <span className="bg-blue-900/50 text-blue-200 text-xs px-2 py-1 rounded mt-2 inline-block">
+                                Data de início: {new Date(trip.start_date + 'T12:00:00').toLocaleDateString('pt-BR')}
+                            </span>
+                            <span className="bg-blue-900/50 text-blue-200 text-xs px-2 py-1 rounded mt-2 inline-block">
+                                Data de fim: {new Date(trip.end_date + 'T12:00:00').toLocaleDateString('pt-BR')}
                             </span>
                         </div>
 

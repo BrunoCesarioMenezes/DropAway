@@ -39,13 +39,15 @@ class TripController extends Controller
     public function store(StoreTripRequest $request)
     {
 
-        dd($request);
+        
 
         $user = current_user();
 
         $trip = new Trip();
         $trip->user_id = $user->id;
-        $trip->name = 'Nova Viagem';
+        $trip->name = $request->input('tripName');
+        $trip->start_date = $request->input('start_date');
+        $trip->end_date = $request->input('end_date');
         $days = 0;
 
         $cities = $request->input('selectedCities', []);

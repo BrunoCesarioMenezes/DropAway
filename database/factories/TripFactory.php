@@ -15,6 +15,8 @@ class TripFactory extends Factory
         return [
             'name' => fake()->sentence(3), // Ex: "Férias de Verão 2024"
             'days' => fake()->numberBetween(3, 20),
+            'start_date' => fake()->date(),
+            'end_date' => fake()->date(),
             // Cria um usuário novo se não for passado um id
             'user_id' => User::factory(), 
         ];

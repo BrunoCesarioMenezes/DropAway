@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->integer('days');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
             $table->timestamps();
         });
     }

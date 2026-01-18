@@ -15,6 +15,8 @@ class Trip extends Model
         'name',
         'days',
         'user_id',
+        'start_date',
+        'end_date'
     ];
 
     public function user()
