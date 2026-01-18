@@ -29,9 +29,9 @@ export default function Index({ users }: Props) {
                 <div className="flex w-full items-center justify-between border-b-2 border-white pb-5">
                     <button
                         onClick={() => setCreateVisible(true)}
-                        className="bg-[#03989E] hover:bg-teal-600 text-white px-4 py-2 rounded-lg font-bold"
+                        className="bg-transparent hover:bg-[#f5c47a] hover:text-black hover:border-transparent border-2 border-white text-white px-2 py-2 rounded-lg font-bold hover:cursor-pointer"
                     >
-                        Novo Usuário
+                       + Novo Usuário
                     </button>
 
                     <h1 className="text-2xl font-semibold text-white">
@@ -101,7 +101,7 @@ export default function Index({ users }: Props) {
                                         <div className="flex gap-3 items-center justify-center">
                                             <button
                                                 onClick={() => setEditModalVisible(user)}
-                                                className="text-sm font-semibold text-[#3b1f0b] hover:underline"
+                                                className="text-sm font-semibold text-[#3b1f0b] hover:underline hover:cursor-pointer"
                                             >
                                                 Editar
                                             </button>
@@ -115,7 +115,7 @@ export default function Index({ users }: Props) {
                                                         'Deseja remover este usuário?',
                                                     )
                                                 }
-                                                className="text-sm font-semibold text-red-700 hover:underline"
+                                                className="text-sm font-semibold text-red-700 hover:underline hover:cursor-pointer"
                                             >
                                                 Remover
                                             </Link>
@@ -129,11 +129,11 @@ export default function Index({ users }: Props) {
                 </div>
                 {/* Fim da Tabela */}
 
-            {/* MODAL */}
+            {/* MODAL CRIAR */}
             <CreateUserModal
                 open={createVisible}
                 onClose={() => setCreateVisible(false)} />
-            {/* Fim do Card Principal */}
+            {/* MODAL EDITAR */}
             {editModalVisible && (
                 <EditModal
                     user={editModalVisible}
