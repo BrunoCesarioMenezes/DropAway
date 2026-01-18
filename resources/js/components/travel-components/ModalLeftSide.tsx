@@ -9,11 +9,15 @@ export default function ModalLeftSide({
     handleCitySelection,
     selectedCities,
     setSelectedCities,
+    setCenter,
+    setZoom,
 }: {
     isLoaded: boolean;
     handleCitySelection: (cityData: City) => void;
     selectedCities: City[];
     setSelectedCities: (cities: City[]) => void;
+    setCenter: (center: { lat: number; lng: number }) => void;
+    setZoom: (zoom: number) => void;
 }) {
     const handleAddActivity = ({
         cityIndex,
@@ -122,6 +126,8 @@ export default function ModalLeftSide({
                                     ),
                                 )
                             }
+                            onSetCenter={setCenter}
+                            onSetZoom={setZoom}
                         />
                     ))
                 )}

@@ -5,8 +5,8 @@ const containerStyle = {
     height: '100%',
 };
 
-export default function Maps({isLoaded, markers, center}
-    : {isLoaded: boolean, markers: unknown[], center: {lat: number, lng: number}}) {
+export default function Maps({isLoaded, markers, center, zoom}
+    : {isLoaded: boolean, markers: unknown[], center: {lat: number, lng: number}, zoom: number}) {
 
     const markersTyped = markers as {lat: number, lng: number}[];
 
@@ -22,7 +22,7 @@ export default function Maps({isLoaded, markers, center}
         <GoogleMap
             mapContainerStyle={containerStyle}
             center={center}
-            zoom={6}
+            zoom={zoom}
         >
         {/* Desenha os marcadores nos pontos */}
         {markersTyped.map((ponto, index) => (

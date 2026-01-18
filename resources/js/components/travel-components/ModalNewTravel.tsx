@@ -6,6 +6,7 @@ import { City } from "./City";
 
 export default function ModalnewTravel({ toggleModal }: { toggleModal: () => void }) {
     const [mapCenter, setMapCenter] = useState({ lat: -23.5505, lng: -46.6333 });
+    const [mapZoom, setMapZoom] = useState(6);
     const [selectedCities, setSelectedCities] = useState<City[]>([]);
 
     const { isLoaded } = useJsApiLoader({
@@ -16,6 +17,7 @@ export default function ModalnewTravel({ toggleModal }: { toggleModal: () => voi
 
     const handleCitySelection = (cityData: City) => {
         setMapCenter({ lat: cityData.lat, lng: cityData.lng });
+        setMapZoom(6);
         setSelectedCities((prev) => [...prev, cityData]);
     };
 
@@ -25,21 +27,21 @@ export default function ModalnewTravel({ toggleModal }: { toggleModal: () => voi
 
     return (
         <div className="fixed inset-0 flex z-50 w-screen h-screen bg-slate-950 overflow-hidden">
-            
+
             {/* Esquerda: Painel de Controle */}
             {/* Aumentamos de 450px para 500px para acomodar melhor os inputs de data horizontais */}
             <div className="w-[700px] min-w-[700px] h-full bg-slate-900 shadow-2xl z-20 flex flex-col border-r border-slate-800 transition-all">
-                
+
                 {/* Cabeçalho do Painel */}
                 <div className="p-4 flex justify-between items-center bg-slate-900/50 backdrop-blur-sm border-b border-slate-800">
-                    <button 
-                        onClick={toggleModal} 
+                    <button
+                        onClick={toggleModal}
                         className="p-2 bg-slate-800 text-white rounded-full hover:bg-red-600 transition-all hover:scale-105 active:scale-95"
                     >
                         ✕
                     </button>
-                    <button 
-                        onClick={showStructureTravel} 
+                    <button
+                        onClick={showStructureTravel}
                         className="text-[10px] font-bold bg-amber-500 px-4 py-1.5 rounded-full text-black hover:bg-amber-400 transition-colors shadow-lg"
                     >
                         LOG ESTRUTURA
@@ -53,41 +55,79 @@ export default function ModalnewTravel({ toggleModal }: { toggleModal: () => voi
                         handleCitySelection={handleCitySelection}
                         selectedCities={selectedCities}
                         setSelectedCities={setSelectedCities}
+                        setCenter={setMapCenter}
+                        setZoom={setMapZoom}
                     />
                 </div>
             </div>
 
             {/* Direita: Mapa e Estatísticas */}
             <div className="flex-1 relative bg-slate-200 h-full">
-                <Maps isLoaded={isLoaded} center={mapCenter} markers={selectedCities} />
+                <Maps isLoaded={isLoaded} center={mapCenter} zoom={mapZoom} markers={selectedCities} />
 
                 {/* Dashboard flutuante de Estatísticas */}
                 <div className="absolute bottom-6 left-6 z-10 bg-slate-900/95 backdrop-blur-md p-5 rounded-2xl border border-slate-700 shadow-2xl text-white min-w-[220px]">
                     <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4 border-b border-slate-800 pb-2">
                         Resumo da Viagem
                     </h3>
-                    
+
                     <div className="space-y-3">
                         <StatItem label="Cidades" value={selectedCities.length} />
-                        
-                        <StatItem 
-                            label="Total Dias" 
-                            value={selectedCities.reduce((acc, c) => acc + c.days, 0)} 
+
+                        <StatItem
+                            label="Total Dias"
+                            value={selectedCities.reduce((acc, c) => acc + c.days, 0)}
                         />
-                        
-                        <StatItem 
-                            label="Atividades" 
-                            value={selectedCities.reduce((acc, c) => 
+
+                        <StatItem
+                            label="Atividades"
+                            value={selectedCities.reduce((acc, c) =>
                                 acc + c.day_array.reduce((dAcc, d) => dAcc + d.activities.length, 0), 0)
-                            } 
+                            }
                         />
-                        
-                        <StatItem 
-                            label="Estimativa" 
-                            value={`R$ ${selectedCities.reduce((acc, c) => 
-                                acc + c.day_array.reduce((dAcc, d) => 
-                                    dAcc + d.activities.reduce((aAcc, a) => 
-                                        aAcc + (a.cost?.max || 0), 0), 0), 0).toFixed(0)}`} 
+
+                        <StatItem
+                            label="Estimativa"
+                            value={`R$ ${selectedCities.reduce((acc, c) =>
+                                acc + c.day_array.reduce((dAcc, d) =>
+                                    dAcc + d.activities.reduce((aAcc, a) =>
+                                        aAcc + (a.cost?.max || 0), 0), 0), 0).toFixed(0)}`}
+                        />
+
+                        <StatItem
+                            label="Distância total"
+                            value={
+                                `${
+                                    (() => {
+                                        const R = 6371; // Raio da Terra em km
+                                        let totalDistance = 0;
+
+                                        const toRad = (value: number) => (value * Math.PI) / 180;
+
+                                        const allPoints = selectedCities.map(city => ({ lat: city.lat, lng: city.lng }));
+
+                                        for (let i = 0; i < allPoints.length - 1; i++) {
+                                            const lat1 = allPoints[i].lat;
+                                            const lon1 = allPoints[i].lng;
+                                            const lat2 = allPoints[i + 1].lat;
+                                            const lon2 = allPoints[i + 1].lng;
+
+                                            const dLat = toRad(lat2 - lat1);
+                                            const dLon = toRad(lon2 - lon1);
+
+                                            const a =
+                                                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                                                Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+                                                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+                                            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                                            const distance = R * c;
+
+                                            totalDistance += distance;
+                                        }
+
+                                        return totalDistance.toFixed(2);
+                                })()} km`
+                            }
                         />
                     </div>
                 </div>

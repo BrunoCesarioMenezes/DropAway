@@ -8,6 +8,8 @@ interface CityItemProps {
     onAddActivity: (dayIndex: number, activity: Activity) => void;
     onRemoveActivity: (dayIndex: number, activityIndex: number) => void;
     onRemoveCity: () => void;
+    onSetCenter: (center: { lat: number; lng: number }) => void;
+    onSetZoom: (zoom: number) => void;
 }
 
 const Prices = {
@@ -18,7 +20,7 @@ const Prices = {
     4: ["Luxo", { min: 200, max: 1000 }],
 } as const;
 
-export default function CityItem({ city, onAddActivity, onRemoveActivity, onRemoveCity }: CityItemProps) {
+export default function CityItem({ city, onAddActivity, onRemoveActivity, onRemoveCity, onSetCenter, onSetZoom }: CityItemProps) {
     const [activeDay, setActiveDay] = useState(0);
 
     const {
@@ -43,15 +45,32 @@ export default function CityItem({ city, onAddActivity, onRemoveActivity, onRemo
 
         service.getDetails({
             placeId,
-            fields: ['name', 'rating', 'price_level', 'formatted_address', 'place_id']
+            fields: ['name', 'rating', 'price_level', 'formatted_address', 'place_id', 'geometry']
         }, (place, status) => {
             if (status === google.maps.places.PlacesServiceStatus.OK && place) {
                 const googlePrice = place.price_level;
                 const safePriceKey = (typeof googlePrice === 'number' && googlePrice in Prices) ? (googlePrice as keyof typeof Prices) : 0;
 
+                let finalLat = 0;
+                let finalLng = 0;
+
+                if (place.geometry?.location) {
+                    // Forma padrão: chamando as funções
+                    finalLat = place.geometry.location.lat();
+                    finalLng = place.geometry.location.lng();
+                } else if (place.geometry?.viewport) {
+                    // Fallback: Centro do Viewport
+                    const ne = place.geometry.viewport.getNorthEast();
+                    const sw = place.geometry.viewport.getSouthWest();
+                    finalLat = (ne.lat() + sw.lat()) / 2;
+                    finalLng = (ne.lng() + sw.lng()) / 2;
+                }
+
                 const newActivity: Activity = {
                     place_id: place.place_id || "",
                     name: place.name || "",
+                    lat: finalLat,
+                    lng: finalLng,
                     rating: place.rating,
                     priceLevel: googlePrice,
                     cost: Prices[safePriceKey][1],
@@ -63,6 +82,13 @@ export default function CityItem({ city, onAddActivity, onRemoveActivity, onRemo
                 clearSuggestions();
             }
         });
+    };
+
+    const handleActivityCenter = (activity: Activity) => {
+        if (activity.lat && activity.lng) {
+            onSetCenter({ lat: activity.lat, lng: activity.lng });
+            onSetZoom(15);
+        }
     };
 
     return (
@@ -117,7 +143,7 @@ export default function CityItem({ city, onAddActivity, onRemoveActivity, onRemo
                 {city.day_array?.[activeDay]?.activities.map((act, idx) => (
                     <div key={idx} className="bg-slate-900/50 p-2 rounded-lg border border-slate-700 flex flex-col gap-1">
                         <div className="flex justify-between items-center">
-                            <span className="font-bold text-blue-300 text-[11px] truncate">{act.name}</span>
+                            <span onClick={() => {handleActivityCenter(act)}} className="font-bold text-blue-300 text-[11px] truncate hover:underline">{act.name}</span>
                             <button onClick={() => onRemoveActivity(activeDay, idx)} className="text-slate-600 hover:text-red-400 text-xs">✕</button>
                         </div>
                         <div className="flex gap-2 text-[9px] font-medium">
