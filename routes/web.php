@@ -3,6 +3,7 @@
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Controllers\TripController;
 use App\Http\Middleware\AnyRoleMiddleware;
 use App\Http\Middleware\UserMiddleware;
 use Illuminate\Support\Facades\Http;
@@ -17,9 +18,20 @@ Route::middleware(AnyRoleMiddleware::class)->group(function () {
 });
 
 Route::middleware(UserMiddleware::class)->group(function () {
-    Route::get('/travels', function () {
-        return Inertia::render('User/Travels');
-    })->name('travels');
+
+    // 1. PÁGINA DE VIAGENS (Listagem)
+    // Substitui a função anônima pelo Controller 'index'
+    Route::get('/travels', [TripController::class, 'index'])
+        ->name('travels.index');
+
+    // 2. SALVAR VIAGEM (Ação do Modal)
+    Route::post('/travels', [TripController::class, 'store'])
+        ->name('travels.store');
+
+    // 3. EXCLUIR VIAGEM (Botão de Lixeira)
+    Route::delete('/travels/{id}', [TripController::class, 'destroy'])
+        ->name('travels.destroy');
+
 });
 
 Route::middleware(AdminMiddleware::class)->prefix('admin')->name('admin.')

@@ -28,7 +28,7 @@ class LoginController extends Controller
 
         if(Auth::guard('web')->attempt($credentials)){
             $request->session()->regenerate();
-            return redirect()->route('travels');
+            return redirect()->route('travels.index');
         }
 
         if(Auth::guard('admin')->attempt($credentials)){
