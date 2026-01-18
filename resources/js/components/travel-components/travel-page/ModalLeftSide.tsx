@@ -70,7 +70,7 @@ export default function ModalLeftSide({
     return (
 
         // TÍTULO
-        <div className="flex h-full w-[700px] flex-col justify-center content-center overflow-hidden p-3 overflow-y-auto text-white">
+        <div className="flex h-full w-[700px] flex-col content-center overflow-hidden p-3 overflow-y-auto text-white">
             <div className="mb-6 flex flex-col items-center">
                 <h2 className="text-2xl font-black tracking-tight">
                     Roteiro de Viagem
