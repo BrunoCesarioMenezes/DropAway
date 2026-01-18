@@ -7,6 +7,7 @@ import CityItem from './CityItem';
 export default function ModalLeftSide({
     isLoaded,
     handleCitySelection,
+    trip,
     selectedCities,
     setSelectedCities,
     setCenter,
@@ -14,11 +15,13 @@ export default function ModalLeftSide({
 }: {
     isLoaded: boolean;
     handleCitySelection: (cityData: City) => void;
+    trip: unknown;
     selectedCities: City[];
     setSelectedCities: (cities: City[]) => void;
     setCenter: (center: { lat: number; lng: number }) => void;
     setZoom: (zoom: number) => void;
 }) {
+
     const handleAddActivity = ({
         cityIndex,
         dayIndex,

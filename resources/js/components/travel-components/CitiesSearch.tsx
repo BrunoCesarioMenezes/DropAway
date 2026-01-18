@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocomplete';
 import { City } from './City';
+import { start } from 'repl';
 
 export default function CitiesSearch({ onSelectCity }: { onSelectCity: (cityData: City) => void }) {
     const {
@@ -16,6 +17,7 @@ export default function CitiesSearch({ onSelectCity }: { onSelectCity: (cityData
 
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
+
 
     const handleSelect = async (description: string) => {
         if (!startDate || !endDate) return alert("Selecione o período!");
@@ -35,7 +37,9 @@ export default function CitiesSearch({ onSelectCity }: { onSelectCity: (cityData
         onSelectCity({
             name: description,
             lat, lng, days: diffDays,
-            day_array: Array.from({ length: diffDays }, () => ({ activities: [] }))
+            day_array: Array.from({ length: diffDays }, () => ({ activities: [] })),
+            start_date: startDate,
+            end_date: endDate,
         });
             // Limpa tudo
         setValue('');

@@ -6,4 +6,6 @@ export interface City {
     lng: number;
     days: number;
     day_array: Day[];
+    start_date: string;
+    end_date: string;
 }
