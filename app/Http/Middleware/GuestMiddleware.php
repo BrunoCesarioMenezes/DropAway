@@ -15,8 +15,11 @@ class GuestMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (current_user()) {
-            return redirect()->route('dashboard');
+        if (is_user()) {
+            return redirect()->route('travels.index');
+        }
+        if(is_admin()) {
+            return redirect()->route('admin.dashboard');
         }
         return $next($request);
     }

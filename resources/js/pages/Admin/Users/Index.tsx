@@ -1,7 +1,9 @@
-import { Link } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
 import { HomeIcon, UserIcon } from '@heroicons/react/24/solid'
 import { useState } from 'react';
+
 import EditModal from '@/components/user/EditModal';
+import CreateUserModal from './Create';
 
 type User = {
     id: number;
@@ -18,11 +20,13 @@ interface Props {
 
 export default function Index({ users }: Props) {
 
+    const [open, setOpen] = useState(false);
     const [editModalVisible, setEditModalVisible] = useState<User | null>(null)
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-[#180C02] p-5">
             <div className="w-full rounded-2xl bg-[#362312] pt-6 pb-10 pl-5 pr-5">
+
                 {/* Header */}
                 <div className='flex w-full items-center justify-between border-white border-b-3 flex-row pb-5 '>
                     <div className='flex gap-2'>
@@ -32,58 +36,65 @@ export default function Index({ users }: Props) {
 
                     </div>
                     <h1 className="text-center text-2xl font-semibold text-white ">
+                <div className="flex w-full items-center justify-between border-b-2 border-white pb-5">
+                    <button
+                        onClick={() => setOpen(true)}
+                        className="bg-[#03989E] hover:bg-teal-600 text-white px-4 py-2 rounded-lg font-bold"
+                    >
+                        Novo Usuário
+                    </button>
+
+                    <h1 className="text-2xl font-semibold text-white">
                         Gerenciamento de Usuários
                     </h1>
-                    <div className='flex flex-row gap-2 w-25'>
-                        <HomeIcon className='w-9 h-9 text-white solid'>Icon</HomeIcon>
-                        <UserIcon className='w-9 h-9 text-white solid'>Icon</UserIcon>
+
+                    <div className="flex gap-2">
+                        <HomeIcon className="w-9 h-9 text-white" />
+                        <UserIcon className="w-9 h-9 text-white" />
                     </div>
                 </div>
 
                 {/* Tabela */}
-                <div>
-                    <table className="w-full border-separate pt-6 pr-5 pl-5">
+                <table className="w-full border-separate pt-6">
+                    <thead>
+                        <tr className="bg-[#f5c47a] text-[#3b1f0b]">
+                            <th className="rounded-tl-lg py-2">ID</th>
+                            <th>Img</th>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th className="rounded-tr-lg">Ações</th>
+                        </tr>
+                    </thead>
 
-                        {/* Cabeçalho da Tabela */}
-                        <thead>
-                            <tr className="bg-[#f5c47a] text-[#3b1f0b]">
-                                <th className="rounded-tl-lg w-1/15 py-2">ID</th>
-                                <th className='w-1/15'>Img</th>
-                                <th className='w-4/15'>Nome</th>
-                                <th className='w-7/15'>Email</th>
-                                <th className="rounded-tr-lg">
-                                    Ações
-                                </th>
-                            </tr>
-                        </thead>
+                    <tbody>
+                        {users.map(user => (
+                            <tr
+                                key={user.id}
+                                className="bg-[#FFD18D] text-[#3b1f0b]"
+                            >
+                                <td className="py-3 text-center font-semibold">
+                                    {user.id}
+                                </td>
 
-                        {/* Linhas */}
-                        <tbody>
-                            {users.map((user) => (
-                                <tr
-                                    key={user.id}
-                                    className="bg-[#FFD18D] text-[#3b1f0b]"
-                                >
-
-                                    {/* ID */}
-                                    <td className=" py-3 font-semibold text-center">
-                                        {user.id}
-                                    </td>
-
-                                    {/* Imagem */}
-                                    <td className='flex h-full  justify-center pt-1'>
-                                        {user.photo ? (
+                                <td className="flex justify-center py-2">
+                                    {user.photo ? (
+                                        <div className="h-10 w-10 rounded-full overflow-hidden border">
                                             <img
                                                 src={`/storage/${user.photo}`}
-                                                alt="Foto"
-                                                className=" flex items-center justify-center h-10 w-10 rounded-full border-1 border-[#3b1f0b] object-cover"
+                                                alt="Foto do usuário"
+                                                className="h-full w-full object-cover"
                                             />
-                                        ) : (
-                                            <div className="flex items-center justify-center rounded-full bg-[#3b1f0b] text-[#ffd89b]">
-                                                👤
-                                            </div>
-                                        )}
-                                    </td>
+                                        </div>
+                                    ) : (
+                                        <div className="h-10 w-10 rounded-full overflow-hidden border">
+                                            <img
+                                                src="/img/default-avatar-icon-of-social-media-user-vector.jpg"
+                                                alt="Avatar padrão"
+                                                className="h-full w-full object-cover"
+                                            />
+                                        </div>
+                                    )}
+                                </td>
 
                                     {/* Nome */}
                                     <td className=' text-center'>
@@ -128,6 +139,8 @@ export default function Index({ users }: Props) {
                 </div>
                 {/* Fim da Tabela */}
 
+                {/* MODAL */}
+                <CreateUserModal open={open} onClose={() => setOpen(false)} />
             </div>
             {/* Fim do Card Principal */}
             {editModalVisible && (

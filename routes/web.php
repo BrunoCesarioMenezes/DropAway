@@ -3,6 +3,7 @@
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Controllers\TripController;
 use App\Http\Middleware\AnyRoleMiddleware;
 use App\Http\Middleware\UserMiddleware;
 use Illuminate\Support\Facades\Http;
@@ -13,19 +14,37 @@ use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 
 
 Route::middleware(AnyRoleMiddleware::class)->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
+
 });
 
 Route::middleware(UserMiddleware::class)->group(function () {
 
+    // 1. PÁGINA DE VIAGENS (Listagem)
+    // Substitui a função anônima pelo Controller 'index'
+    Route::get('/travels', [TripController::class, 'index'])
+        ->name('travels.index');
+
+    // 2. SALVAR VIAGEM (Ação do Modal)
+    Route::post('/travels', [TripController::class, 'store'])
+        ->name('travels.store');
+
+    Route::get('/travels/{trip}/edit', [TripController::class, 'edit'])
+        ->name('travels.edit');
+
+    Route::put('/travels/{trip}', [TripController::class, 'update'])
+        ->name('travels.update');
+
+    // 3. EXCLUIR VIAGEM (Botão de Lixeira)
+    Route::delete('/travels/{id}', [TripController::class, 'destroy'])
+        ->name('travels.destroy');
+
 });
 
-Route::middleware(AdminMiddleware::class)
-    ->prefix('admin')
-    ->name('admin.')
-    ->group(function () {
+Route::middleware(AdminMiddleware::class)->prefix('admin')->name('admin.')
+->group(function () {
+        Route::get('dashboard', function () {
+            return Inertia::render('dashboard');
+        })->name('dashboard');
 
         Route::get('/users', [UserController::class, 'index'])
             ->name('users.index');
@@ -38,6 +57,10 @@ Route::middleware(AdminMiddleware::class)
 
         Route::delete('/users/{id}', [UserController::class, 'destroy'])
             ->name('users.destroy');
+
+        Route::post('/users', [UserController::class, 'store'])
+            ->name('users.store');
+
     });
 
 Route::get('/error', function () {

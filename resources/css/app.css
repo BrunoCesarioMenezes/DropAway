@@ -1,6 +1,6 @@
 @import 'tailwindcss';
-
 @import "tw-animate-css";
+@import url('https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@300..900&display=swap');
 
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
@@ -12,6 +12,8 @@
         'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
         'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
         'Noto Color Emoji';
+
+    --font-sansita: 'Sansita Swashed', cursive;
 
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
@@ -60,7 +62,9 @@
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-ring: var(--sidebar-ring);
 }
-
+.font-swash {
+    font-feature-settings: "swsh" 1, "salt" 1;
+}
 :root {
     --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
