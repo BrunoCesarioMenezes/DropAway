@@ -1,9 +1,9 @@
-import { Link, router } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import { HomeIcon, UserIcon } from '@heroicons/react/24/solid'
 import { useState } from 'react';
 
 import EditModal from '@/components/user/EditModal';
-import CreateUserModal from './Create';
+import CreateUserModal from '../../../components/user/CreateModal';
 
 type User = {
     id: number;
@@ -16,11 +16,9 @@ interface Props {
     users: User[];
 }
 
-
-
 export default function Index({ users }: Props) {
 
-    const [open, setOpen] = useState(false);
+    const [createVisible, setCreateVisible] = useState(false);
     const [editModalVisible, setEditModalVisible] = useState<User | null>(null)
 
     return (
@@ -28,17 +26,9 @@ export default function Index({ users }: Props) {
             <div className="w-full rounded-2xl bg-[#362312] pt-6 pb-10 pl-5 pr-5">
 
                 {/* Header */}
-                <div className='flex w-full items-center justify-between border-white border-b-3 flex-row pb-5 '>
-                    <div className='flex gap-2'>
-                        <a href="" className="bg-[#03989E] hover:bg-teal-600 text-white px-4 py-2 rounded-lg font-bold flex items-center gap-2 {{ request('type', 'drivers') === 'drivers' ? '' : 'hidden' }}">
-                        Novo Motorista
-                    </a>
-
-                    </div>
-                    <h1 className="text-center text-2xl font-semibold text-white ">
                 <div className="flex w-full items-center justify-between border-b-2 border-white pb-5">
                     <button
-                        onClick={() => setOpen(true)}
+                        onClick={() => setCreateVisible(true)}
                         className="bg-[#03989E] hover:bg-teal-600 text-white px-4 py-2 rounded-lg font-bold"
                     >
                         Novo Usuário
@@ -139,9 +129,10 @@ export default function Index({ users }: Props) {
                 </div>
                 {/* Fim da Tabela */}
 
-                {/* MODAL */}
-                <CreateUserModal open={open} onClose={() => setOpen(false)} />
-            </div>
+            {/* MODAL */}
+            <CreateUserModal
+                open={createVisible}
+                onClose={() => setCreateVisible(false)} />
             {/* Fim do Card Principal */}
             {editModalVisible && (
                 <EditModal
