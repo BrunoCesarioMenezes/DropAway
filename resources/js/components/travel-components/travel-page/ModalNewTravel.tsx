@@ -20,6 +20,16 @@ export default function ModalnewTravel({
     const [tripLoaded, setTripLoaded] = useState<Object>('');
     const [isEdit, setIsEdit] = useState(false);
 
+    const emptyModal = () => {
+        setMapCenter({lat:0, lng:0});
+        setMapZoom(6);
+        setSelectedCities([]);
+        setTripName('');
+        setTripLoaded('');
+        setIsEdit(false);
+        toggleModal();
+    }
+
     useEffect(() => {
         if (tripID) {
             axios
@@ -121,7 +131,7 @@ export default function ModalnewTravel({
                 {/* Cabeçalho do Painel */}
                 <div className="flex items-center justify-between p-4 backdrop-blur-sm">
                     <button
-                        onClick={toggleModal}
+                        onClick={emptyModal}
                         className="rounded-full pl-2 text-2xl text-white transition-all hover:text-red-500"
                     >
                         ✕
