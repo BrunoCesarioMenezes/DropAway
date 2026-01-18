@@ -71,6 +71,9 @@ export default function Login() {
                 <div className="flex items-center justify-center w-full h-full">
                     <button className= "w-20 h-10 font-sansita font-semibold bg-[#7C420B] hover:bg-[#402103] rounded-2xl border-2 border-black" type="submit">
                         Entrar</button>
+
+                    <a href={`/users/cadastro`}>Cadastre-se</a>
+
                 </div>
 
                 </form>
