@@ -185,7 +185,7 @@ export default function CityItem({ city, onAddActivity, onRemoveActivity, onRemo
             </div>
 
             {/* Lista de Atividades do Dia */}
-            <div className="custom-scrollbar max-h-40 space-y-2 overflow-y-auto pr-1">
+            <div className="space-y-2 pr-1">
                 {city.day_array?.[activeDay]?.activities.map((act, idx) => (
                     <div key={idx} className="bg-[#261701] p-2 rounded-lg border border-[#ffe8c55d] flex flex-col gap-1">
                         <div className="flex justify-between items-center">
