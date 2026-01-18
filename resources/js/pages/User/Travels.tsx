@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Head, router } from '@inertiajs/react'; // Importe o router do Inertia
 import ModalnewTravel from "../../components/travel-components/ModalNewTravel";
+import { HomeIcon, UserIcon } from "@heroicons/react/24/outline";
+import NavbarAdm from "@/components/NavbarAdm";
+import NavbarUser from "@/components/NavbarUser";
 
 // Defina a interface para o TypeScript não reclamar
 interface Trip {
@@ -43,23 +46,31 @@ export default function Travels({ trips }: { trips: Trip[] }) {
     console.log("Viagens recebidas do Laravel:", trips);
 
     return (
-        <div className="flex flex-col h-screen p-8 bg-slate-950 text-white overflow-y-auto">
-            <Head title="Minhas Viagens" />
+        <div className="flex flex-col h-screen p-8 bg-[#362312] text-white overflow-y-auto">
+            <Head />
+            {/* Header */}
+            <NavbarUser></NavbarUser>
+                <div className="flex mt-10 w-full items-center justify-between border-b-2 border-[#F8F4E1] pb-5">
 
-            <h1 className="text-3xl font-bold mb-2">Suas viagens</h1>
-            <p className="text-slate-400 mb-8">Gerencie suas próximas aventuras.</p>
+                <div>
+                <h3 className="text-2xl font-bold text-[#F8F4E1] mb-2">Suas viagens</h3>
+                <p className="text-[#F8F4E1]">Gerencie suas próximas aventuras.</p>
+                </div>  
+                
+                </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+
+            <div className="pt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 
                 {/* Botão de Criar */}
                 <button
                     onClick={toggleModal}
-                    className="flex flex-col items-center justify-center h-64 border-2 border-dashed border-slate-700 rounded-xl hover:border-blue-500 hover:bg-slate-900 transition-all group"
+                    className="flex flex-col items-center justify-center h-64 border-2 border-dashed border-[#F8F4E1] rounded-xl hover:border-[#362312] hover:bg-[#F8F4E1] transition-all group"
                 >
-                    <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mb-4 group-hover:bg-blue-600 transition-colors">
-                        <span className="text-3xl text-slate-400 group-hover:text-white">+</span>
+                    <div className="w-16 h-16 bg-[#F8F4E1] rounded-full flex items-center justify-center mb-4 group-hover:bg-[#362312] transition-colors">
+                        <span className="text-3xl text-[#362312] group-hover:text-[#F8F4E1]">+</span>
                     </div>
-                    <span className="font-semibold text-slate-300 group-hover:text-white">Criar nova viagem</span>
+                    <span className="font-semibold text-[#F8F4E1] group-hover:text-[#362312]">Criar nova viagem</span>
                 </button>
 
                 {/* MUDANÇA 3: Mapeie direto a prop 'trips' */}
@@ -94,7 +105,6 @@ export default function Travels({ trips }: { trips: Trip[] }) {
                 ))}
             </div>
 
-            <button className="bg-red-500 px-2 py-1 w-32 self-start mt-4" onClick={logout}>Logout</button>
 
             {isModalOpen && (
                 <ModalnewTravel
