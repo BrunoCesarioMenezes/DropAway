@@ -109,33 +109,34 @@ export default function CityItem({ city, onAddActivity, onRemoveActivity, onRemo
     };
 
     return (
-        <div className="rounded-xl border-l-4 border-blue-500 bg-slate-800 p-4 shadow-lg transition-all">
+        // CARD
+        <div className="rounded-xl border-l-4 border-[#ffe2b6] bg-[#2f180382] border-1 p-4 shadow-lg transition-all">
             <div className="mb-3 flex items-start justify-between">
                 <div className="flex flex-col gap-1">
                     <h3 className="text-lg font-bold text-white">
                         {city.name.split(',')[0]}
                     </h3>
-                    <span className="text-[10px] font-semibold text-slate-400 uppercase">
+                    <span className="text-[10px] font-semibold text-[#ffffffd0] uppercase">
                         {city.days} dias de estadia
                     </span>
                     {/* Container de Datas Estilizado */}
                     <div className="mt-1 flex items-center gap-3">
                         <div className="flex flex-col">
-                            <span className="text-[9px] font-bold tracking-tighter text-slate-500 uppercase">
+                            <span className="text-[9px] font-bold tracking-tighter text-[#ffffffad] uppercase">
                                 Início
                             </span>
-                            <span className="rounded border border-slate-700 bg-slate-900/50 px-2 py-0.5 font-mono text-xs text-slate-300">
+                            <span className="rounded border border-[#ffe8c55d] bg-[#261701] px-2 py-0.5 font-mono text-xs text-slate-300">
                                 {formatDate(city.start_date)}
                             </span>
                         </div>
 
-                        <div className="mt-3 text-slate-600">→</div>
+                        <div className="mt-3 text-[#ffe8c5b6]">→</div>
 
                         <div className="flex flex-col">
-                            <span className="text-[9px] font-bold tracking-tighter text-slate-500 uppercase">
+                            <span className="text-[9px] font-bold tracking-tighter text-[#ffffffad] uppercase">
                                 Término
                             </span>
-                            <span className="rounded border border-slate-700 bg-slate-900/50 px-2 py-0.5 font-mono text-xs text-slate-300">
+                            <span className="rounded border border-[#ffe8c55d] bg-[#261701] px-2 py-0.5 font-mono text-xs text-slate-300">
                                 {formatDate(city.end_date)}
                             </span>
                         </div>
@@ -143,7 +144,7 @@ export default function CityItem({ city, onAddActivity, onRemoveActivity, onRemo
                 </div>
                 <button
                     onClick={onRemoveCity}
-                    className="text-slate-500 transition-colors hover:text-red-500"
+                    className="text-white transition-colors hover:text-red-500"
                 >
                     ✕
                 </button>

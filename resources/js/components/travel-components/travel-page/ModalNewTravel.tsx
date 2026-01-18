@@ -1,8 +1,8 @@
 import { router, usePage } from '@inertiajs/react';
 import { useJsApiLoader } from '@react-google-maps/api';
 import { useEffect, useState } from 'react';
-import { City } from './City';
-import Maps from './Maps';
+import { City } from '../travel-activity/City';
+import Maps from '../Maps';
 import ModalLeftSide from './ModalLeftSide';
 import axios from 'axios';
 
@@ -111,37 +111,32 @@ export default function ModalnewTravel({
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex h-screen w-screen overflow-hidden bg-slate-950">
+
+        // colors: 1:bg-[#362312] 2: bg-[#f5c47a]
+
+        <div className="fixed inset-0 z-50 flex h-screen w-screen overflow-hidden bg-[#362312]">
             {/* Esquerda: Painel de Controle */}
-            {/* Aumentamos de 450px para 500px para acomodar melhor os inputs de data horizontais */}
-            <div className="z-20 flex h-full w-[700px] min-w-[700px] flex-col border-r border-slate-800 bg-slate-900 shadow-2xl transition-all">
+            <div className=" flex h-full flex-col border-r bg-[#362312] shadow-2xl transition-all">
                 {/* Cabeçalho do Painel */}
-                <div className="flex items-center justify-between border-b border-slate-800 bg-slate-900/50 p-4 backdrop-blur-sm">
+                <div className="flex items-center justify-between p-4 backdrop-blur-sm">
                     <button
                         onClick={toggleModal}
-                        className="rounded-full bg-slate-800 p-2 text-white transition-all hover:bg-red-600"
+                        className="rounded-full text-white text-2xl transition-all hover:text-red-500 pl-2"
                     >
                         ✕
                     </button>
 
-                    {/* INPUT DE NOME DA VIAGEM - Adicionado aqui para destaque */}
+                    {/* INPUT DE NOME DA VIAGEM */}
                     <div className="mx-8 flex-1">
                         <input
                             type="text"
                             placeholder="Dê um nome à sua viagem..."
                             value={tripName}
                             onChange={(e) => setTripName(e.target.value)}
-                            className="w-full rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-2 font-bold text-white placeholder-slate-500 transition-all outline-none focus:border-blue-500"
+                            className="w-full rounded-lg border border-[#000000] bg-[#ffe2b6] px-4 py-2 font-bold text-black placeholder-[#362312c8] transition-all outline-none focus:border-[#ff9900] text-center"
                             required
                         />
                     </div>
-
-                    <button
-                        onClick={showStructureTravel}
-                        className="rounded-full bg-amber-500 px-4 py-1.5 text-[10px] font-bold text-black hover:bg-amber-400"
-                    >
-                        LOG ESTRUTURA
-                    </button>
                 </div>
 
                 {/* Área de Conteúdo */}

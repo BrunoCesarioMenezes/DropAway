@@ -1,8 +1,7 @@
-import imagemLanding from '../../pages/img/landing_page.png';
-import { Activity } from './Activity';
-import CitiesSearch from './CitiesSearch';
-import { City } from './City';
-import CityItem from './CityItem';
+import { Activity } from '../travel-activity/Activity';
+import CitiesSearch from '../travel-activity/CitiesSearch';
+import { City } from '../travel-activity/City';
+import CityItem from '../travel-activity/CityItem';
 
 export default function ModalLeftSide({
     isLoaded,
@@ -67,39 +66,37 @@ export default function ModalLeftSide({
     };
 
     return (
-        <div className="flex h-full w-[700px] flex-col overflow-hidden p-6 text-white">
+
+        // TÍTULO
+        <div className="flex h-full w-[700px] flex-col overflow-hidden p-3 text-white">
             <div className="mb-6 flex flex-col items-center">
-                <img
-                    className="mb-4 h-24 w-48 rounded-xl object-cover shadow-lg"
-                    src={imagemLanding}
-                    alt="Landing"
-                />
                 <h2 className="text-2xl font-black tracking-tight">
                     Roteiro de Viagem
                 </h2>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-[#ffffff82]">
                     Adicione destinos e planeje seus dias
                 </p>
             </div>
-
+            {/* Verificação */}
             <div className="mb-6">
                 {isLoaded ? (
+                    // PESQUISA DE CIDADE
                     <CitiesSearch onSelectCity={handleCitySelection} />
                 ) : (
                     <div className="h-12 w-full animate-pulse rounded-xl bg-slate-800" />
                 )}
             </div>
 
+            {/* MEUS DESTINOS */}
             <div className="custom-scrollbar flex-1 space-y-4 overflow-y-auto pr-2">
-                <div className="sticky top-0 z-10 mb-2 flex items-center justify-between border-b border-slate-800 bg-slate-900 py-2">
-                    <p className="text-[10px] font-black tracking-widest text-slate-500 uppercase">
+                <div className="sticky top-0 z-10 mb-2 flex items-center justify-between py-2">
+                    <p className="text-xs font-black tracking-widest text-[#ffffffe7] uppercase">
                         Meus Destinos
                     </p>
-                    <span className="rounded-full bg-blue-600 px-2 py-0.5 text-[10px] font-bold">
+                    <span className="rounded-full bg-[#ffe2b6] px-2 text-xs text-black font-bold">
                         {selectedCities.length}
                     </span>
                 </div>
-
                 {selectedCities.length === 0 ? (
                     <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-800 py-12 text-slate-600">
                         <p className="text-xs italic">
@@ -119,7 +116,7 @@ export default function ModalLeftSide({
                                 })
                             }
                             onRemoveActivity={(dayIdx, actIdx) =>
-                                handleRemoveActivity(i, dayIdx, actIdx)
+                            handleRemoveActivity(i, dayIdx, actIdx)
                             }
                             onRemoveCity={() =>
                                 setSelectedCities(

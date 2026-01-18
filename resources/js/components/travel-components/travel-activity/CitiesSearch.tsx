@@ -47,37 +47,39 @@ export default function CitiesSearch({ onSelectCity }: { onSelectCity: (cityData
         setEndDate('');
     };
 
+    // colors: 1:bg-[#362312] 2: bg-[#f5c47a]
+
     return (
         <div className="relative w-full z-30">
             {/* Container principal mais compacto e escuro para combinar com o tema */}
-            <div className="flex flex-row items-center bg-slate-800 rounded-xl border border-slate-700 p-1 shadow-inner">
+            <div className="flex flex-row items-center bg-[#ffe2b6] rounded-xl border border-black p-1 shadow-inner">
 
                 {/* Input da Cidade */}
                 <input
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
                     disabled={!ready}
-                    className="flex-[2] bg-transparent p-3 text-sm text-white outline-none placeholder-slate-500"
+                    className="flex-[2] bg-transparent p-3 text-sm text-white outline-none placeholder-[#000000c3]"
                     placeholder="Para onde você vai?"
                 />
 
                 {/* Divisor */}
-                <div className="w-px h-8 bg-slate-700 mx-1" />
-
+                <div className="w-px h-8 bg-[#5c2f00] mx-1" />
                 {/* Seção de Datas */}
                 <div className="flex flex-[1.5] items-center gap-1 px-2">
                     <input
                         type="date"
                         value={startDate}
                         onChange={(e) => setStartDate(e.target.value)}
-                        className="bg-transparent text-[11px] text-blue-400 font-bold outline-none w-full appearance-none uppercase"
+                        className="date-input bg-transparent text-xs text-[#5c2f00] font-bold outline-none w-full appearance-none uppercase"
                     />
-                    <span className="text-slate-600 text-xs">→</span>
+                    {/* Divisor */}
+                    <div className="w-px h-8 bg-[#5c2f00] mx-1" />
                     <input
                         type="date"
                         value={endDate}
                         onChange={(e) => setEndDate(e.target.value)}
-                        className="bg-transparent text-[11px] text-blue-400 font-bold outline-none w-full appearance-none uppercase"
+                        className="date-input bg-transparent text-xs text-[#5c2f00] font-bold outline-none w-full appearance-none uppercase"
                     />
                 </div>
             </div>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Head, router } from '@inertiajs/react'; // Importe o router do Inertia
-import ModalnewTravel from "../../components/travel-components/ModalNewTravel";
+import ModalnewTravel from "../../components/travel-components/travel-page/ModalNewTravel";
 
 // Defina a interface para o TypeScript não reclamar
 interface Trip {
