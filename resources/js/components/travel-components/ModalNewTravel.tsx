@@ -8,6 +8,7 @@ import { router } from "@inertiajs/react";
 export default function ModalnewTravel({ toggleModal }: { toggleModal: () => void }) {
     const [mapCenter, setMapCenter] = useState({ lat: -23.5505, lng: -46.6333 });
     const [selectedCities, setSelectedCities] = useState<City[]>([]);
+    const [tripName, setTripName] = useState("");
 
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
@@ -24,9 +25,11 @@ export default function ModalnewTravel({ toggleModal }: { toggleModal: () => voi
         console.log("Resumo da viagem:", selectedCities);
     };
 
-    const saveTravel = () => {
-        router.post('/travels', JSON.parse(JSON.stringify({ selectedCities })));
-    };
+        const saveTravel = () => {
+            const start_date = selectedCities.length > 0 ? selectedCities[0].start_date : null;
+            const end_date = selectedCities.length > 0 ? selectedCities[selectedCities.length - 1].end_date : null;
+            router.post('/travels', JSON.parse(JSON.stringify({ selectedCities, tripName, start_date, end_date })));
+        };
 
     return (
         <div className="fixed inset-0 flex z-50 w-screen h-screen bg-slate-950 overflow-hidden">
@@ -34,33 +37,38 @@ export default function ModalnewTravel({ toggleModal }: { toggleModal: () => voi
             {/* Esquerda: Painel de Controle */}
             {/* Aumentamos de 450px para 500px para acomodar melhor os inputs de data horizontais */}
             <div className="w-[700px] min-w-[700px] h-full bg-slate-900 shadow-2xl z-20 flex flex-col border-r border-slate-800 transition-all">
+    
+    {/* Cabeçalho do Painel */}
+    <div className="p-4 flex justify-between items-center bg-slate-900/50 backdrop-blur-sm border-b border-slate-800">
+        <button onClick={toggleModal} className="p-2 bg-slate-800 text-white rounded-full hover:bg-red-600 transition-all">✕</button>
+        
+        {/* INPUT DE NOME DA VIAGEM - Adicionado aqui para destaque */}
+        <div className="flex-1 mx-8">
+            <input 
+                type="text"
+                placeholder="Dê um nome à sua viagem..."
+                value={tripName}
+                onChange={(e) => setTripName(e.target.value)}
+                className="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-2 text-white font-bold placeholder-slate-500 focus:border-blue-500 outline-none transition-all"
+                required
+            />
+        </div>
 
-                {/* Cabeçalho do Painel */}
-                <div className="p-4 flex justify-between items-center bg-slate-900/50 backdrop-blur-sm border-b border-slate-800">
-                    <button
-                        onClick={toggleModal}
-                        className="p-2 bg-slate-800 text-white rounded-full hover:bg-red-600 transition-all hover:scale-105 active:scale-95"
-                    >
-                        ✕
-                    </button>
-                    <button
-                        onClick={showStructureTravel}
-                        className="text-[10px] font-bold bg-amber-500 px-4 py-1.5 rounded-full text-black hover:bg-amber-400 transition-colors shadow-lg"
-                    >
-                        LOG ESTRUTURA
-                    </button>
-                </div>
+        <button onClick={showStructureTravel} className="text-[10px] font-bold bg-amber-500 px-4 py-1.5 rounded-full text-black hover:bg-amber-400">
+            LOG ESTRUTURA
+        </button>
+    </div>
 
-                {/* Área de Conteúdo (CitiesSearch + Roteiro) */}
-                <div className="flex-1 overflow-hidden">
-                    <ModalLeftSide
-                        isLoaded={isLoaded}
-                        handleCitySelection={handleCitySelection}
-                        selectedCities={selectedCities}
-                        setSelectedCities={setSelectedCities}
-                    />
-                </div>
-            </div>
+    {/* Área de Conteúdo */}
+    <div className="flex-1 overflow-hidden">
+        <ModalLeftSide
+            isLoaded={isLoaded}
+            handleCitySelection={handleCitySelection}
+            selectedCities={selectedCities}
+            setSelectedCities={setSelectedCities}
+        />
+    </div>
+</div>
 
             {/* Direita: Mapa e Estatísticas */}
             <div className="flex-1 relative bg-slate-200 h-full">

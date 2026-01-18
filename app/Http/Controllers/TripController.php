@@ -38,6 +38,9 @@ class TripController extends Controller
      */
     public function store(StoreTripRequest $request)
     {
+
+        dd($request);
+
         $user = current_user();
 
         $trip = new Trip();

@@ -70,7 +70,6 @@ export default function ModalLeftSide({ isLoaded, handleCitySelection, selectedC
     ) : (
         selectedCities.map((city, i) => (
             <CityItem
-                // MUDE AQUI: De key={i} para isso 👇
                 key={`${city.name}-${i}`} 
                 city={city}
                 onAddActivity={(dayIdx, act) => handleAddActivity({ cityIndex: i, dayIndex: dayIdx, activity: act })}

@@ -35,7 +35,9 @@ export default function CitiesSearch({ onSelectCity }: { onSelectCity: (cityData
         onSelectCity({
             name: description,
             lat, lng, days: diffDays,
-            day_array: Array.from({ length: diffDays }, () => ({ activities: [] }))
+            day_array: Array.from({ length: diffDays }, () => ({ activities: [] })),
+            start_date: startDate,
+            end_date: endDate,
         });
 
         setValue('');
