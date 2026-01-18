@@ -1,10 +1,10 @@
-import { router, usePage } from '@inertiajs/react';
+import { router } from '@inertiajs/react';
 import { useJsApiLoader } from '@react-google-maps/api';
-import { useEffect, useState } from 'react';
-import { City } from '../travel-activity/City';
-import Maps from '../Maps';
-import ModalLeftSide from './ModalLeftSide';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
+import Maps from '../Maps';
+import { City } from '../travel-activity/City';
+import ModalLeftSide from './ModalLeftSide';
 
 export default function ModalnewTravel({
     toggleModal,
@@ -18,45 +18,48 @@ export default function ModalnewTravel({
     const [selectedCities, setSelectedCities] = useState<City[]>([]);
     const [tripName, setTripName] = useState('');
     const [tripLoaded, setTripLoaded] = useState<Object>('');
-    const [isEdit,setIsEdit] = useState(false);
+    const [isEdit, setIsEdit] = useState(false);
 
     useEffect(() => {
         if (tripID) {
-            axios.get(`/travels/${tripID}/edit`)
-                .then(res => {
+            axios
+                .get(`/travels/${tripID}/edit`)
+                .then((res) => {
                     const trip = res.data;
                     setTripLoaded(trip);
                     setTripName(trip.tripName);
                     setIsEdit(true);
 
                     if (trip.selectedCities && trip.selectedCities.length > 0) {
-                        const formattedCities = trip.selectedCities.map((city: any) => ({
-                            ...city,
-                            lat: Number(city.lat),
-                            lng: Number(city.lng),
-                            day_array: city.day_array.map((day: any) => ({
-                                ...day,
-                                activities: day.activities.map((act: any) => ({
-                                    ...act,
-                                    lat: Number(act.lat), // Converta aqui também!
-                                    lng: Number(act.lng)
-                                }))
-                            }))
-                        }));
+                        const formattedCities = trip.selectedCities.map(
+                            (city: any) => ({
+                                ...city,
+                                lat: Number(city.lat),
+                                lng: Number(city.lng),
+                                day_array: city.day_array.map((day: any) => ({
+                                    ...day,
+                                    activities: day.activities.map(
+                                        (act: any) => ({
+                                            ...act,
+                                            lat: Number(act.lat), // Converta aqui também!
+                                            lng: Number(act.lng),
+                                        }),
+                                    ),
+                                })),
+                            }),
+                        );
 
                         setSelectedCities(formattedCities);
 
                         setMapCenter({
                             lat: formattedCities[0].lat,
-                            lng: formattedCities[0].lng
+                            lng: formattedCities[0].lng,
                         });
                     }
                 })
-                .catch(err => console.error("Erro ao carregar viagem:", err));
+                .catch((err) => console.error('Erro ao carregar viagem:', err));
         }
     }, [tripID]);
-
-
 
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
@@ -81,7 +84,7 @@ export default function ModalnewTravel({
             selectedCities.length > 0
                 ? selectedCities[selectedCities.length - 1].end_date
                 : null;
-        if(isEdit){
+        if (isEdit) {
             router.put(
                 `/travels/${tripID}`,
                 JSON.parse(
@@ -93,7 +96,7 @@ export default function ModalnewTravel({
                     }),
                 ),
             );
-        } else{
+        } else {
             router.post(
                 '/travels',
                 JSON.parse(
@@ -105,23 +108,21 @@ export default function ModalnewTravel({
                     }),
                 ),
             );
-
         }
         toggleModal();
     };
 
     return (
-
         // colors: 1:bg-[#362312] 2: bg-[#f5c47a]
 
         <div className="fixed inset-0 z-50 flex h-screen w-screen overflow-hidden bg-[#362312]">
             {/* Esquerda: Painel de Controle */}
-            <div className=" flex h-full flex-col border-r bg-[#362312] shadow-2xl transition-all">
+            <div className="flex h-full flex-col border-r bg-[#362312] shadow-2xl transition-all">
                 {/* Cabeçalho do Painel */}
                 <div className="flex items-center justify-between p-4 backdrop-blur-sm">
                     <button
                         onClick={toggleModal}
-                        className="rounded-full text-white text-2xl transition-all hover:text-red-500 pl-2"
+                        className="rounded-full pl-2 text-2xl text-white transition-all hover:text-red-500"
                     >
                         ✕
                     </button>
@@ -133,7 +134,7 @@ export default function ModalnewTravel({
                             placeholder="Dê um nome à sua viagem..."
                             value={tripName}
                             onChange={(e) => setTripName(e.target.value)}
-                            className="w-full rounded-lg border border-[#000000] bg-[#ffe2b6] px-4 py-2 font-bold text-black placeholder-[#362312c8] transition-all outline-none focus:border-[#ff9900] text-center"
+                            className="w-full rounded-lg border border-[#000000] bg-[#ffe2b6] px-4 py-2 text-center font-bold text-black placeholder-[#362312c8] transition-all outline-none focus:border-[#ff9900]"
                             required
                         />
                     </div>
@@ -149,94 +150,133 @@ export default function ModalnewTravel({
                         setSelectedCities={setSelectedCities}
                         setCenter={setMapCenter}
                         setZoom={setMapZoom}
+                        saveTravel={saveTravel}
                     />
                 </div>
             </div>
 
             {/* Direita: Mapa e Estatísticas */}
-            <div onWheel={(e) => {
-                if (e.deltaY > 0) {
-                    setMapZoom(prev => prev - 0.5);
-                } else {
-                    setMapZoom(prev => prev + 0.5);
-                }
-}} className="flex-1 relative bg-slate-200 h-full">
-                <Maps isLoaded={isLoaded} center={mapCenter} zoom={mapZoom} markers={selectedCities} />
+            <div
+                onWheel={(e) => {
+                    if (e.deltaY > 0) {
+                        setMapZoom((prev) => prev - 0.5);
+                    } else {
+                        setMapZoom((prev) => prev + 0.5);
+                    }
+                }}
+                className="relative h-full flex-1 bg-slate-200"
+            >
+                <Maps
+                    isLoaded={isLoaded}
+                    center={mapCenter}
+                    zoom={mapZoom}
+                    markers={selectedCities}
+                />
 
                 {/* Dashboard flutuante de Estatísticas */}
-                <div className="absolute bottom-6 left-6 z-10 min-w-[220px] rounded-2xl border border-slate-700 bg-slate-900/95 p-5 text-white shadow-2xl backdrop-blur-md">
-                    <h3 className="mb-4 border-b border-slate-800 pb-2 text-[10px] font-black tracking-[0.2em] text-slate-500 uppercase">
+                <div className="absolute bottom-6 left-6 z-10 min-w-50 rounded-2xl border border-[#ffe2b6] bg-[#362312] p-5 text-white shadow-2xl backdrop-blur-md">
+                    <h3 className="mb-4 border-b border-white pb-2 text-[10px] font-black tracking-[0.2em] text-white uppercase">
                         Resumo da Viagem
                     </h3>
 
                     <div className="space-y-3">
-                        <StatItem label="Cidades" value={selectedCities.length} />
+                        <StatItem
+                            label="Cidades"
+                            value={selectedCities.length}
+                        />
 
                         <StatItem
                             label="Total Dias"
-                            value={selectedCities.reduce((acc, c) => acc + c.days, 0)}
+                            value={selectedCities.reduce(
+                                (acc, c) => acc + c.days,
+                                0,
+                            )}
                         />
 
                         <StatItem
                             label="Atividades"
-                            value={selectedCities.reduce((acc, c) =>
-                                acc + c.day_array.reduce((dAcc, d) => dAcc + d.activities.length, 0), 0)
-                            }
+                            value={selectedCities.reduce(
+                                (acc, c) =>
+                                    acc +
+                                    c.day_array.reduce(
+                                        (dAcc, d) => dAcc + d.activities.length,
+                                        0,
+                                    ),
+                                0,
+                            )}
                         />
 
                         <StatItem
                             label="Estimativa"
-                            value={`R$ ${selectedCities.reduce((acc, c) =>
-                                acc + c.day_array.reduce((dAcc, d) =>
-                                    dAcc + d.activities.reduce((aAcc, a) =>
-                                        aAcc + (a.cost?.max || 0), 0), 0), 0).toFixed(0)}`}
+                            value={`R$ ${selectedCities
+                                .reduce(
+                                    (acc, c) =>
+                                        acc +
+                                        c.day_array.reduce(
+                                            (dAcc, d) =>
+                                                dAcc +
+                                                d.activities.reduce(
+                                                    (aAcc, a) =>
+                                                        aAcc +
+                                                        (a.cost?.max || 0),
+                                                    0,
+                                                ),
+                                            0,
+                                        ),
+                                    0,
+                                )
+                                .toFixed(0)}`}
                         />
 
                         <StatItem
                             label="Distância total"
-                            value={
-                                `${
-                                    (() => {
-                                        const R = 6371; // Raio da Terra em km
-                                        let totalDistance = 0;
+                            value={`${(() => {
+                                const R = 6371; // Raio da Terra em km
+                                let totalDistance = 0;
 
-                                        const toRad = (value: number) => (value * Math.PI) / 180;
+                                const toRad = (value: number) =>
+                                    (value * Math.PI) / 180;
 
-                                        const allPoints = selectedCities.map(city => ({ lat: city.lat, lng: city.lng }));
+                                const allPoints = selectedCities.map(
+                                    (city) => ({
+                                        lat: city.lat,
+                                        lng: city.lng,
+                                    }),
+                                );
 
-                                        for (let i = 0; i < allPoints.length - 1; i++) {
-                                            const lat1 = allPoints[i].lat;
-                                            const lon1 = allPoints[i].lng;
-                                            const lat2 = allPoints[i + 1].lat;
-                                            const lon2 = allPoints[i + 1].lng;
+                                for (let i = 0; i < allPoints.length - 1; i++) {
+                                    const lat1 = allPoints[i].lat;
+                                    const lon1 = allPoints[i].lng;
+                                    const lat2 = allPoints[i + 1].lat;
+                                    const lon2 = allPoints[i + 1].lng;
 
-                                            const dLat = toRad(lat2 - lat1);
-                                            const dLon = toRad(lon2 - lon1);
+                                    const dLat = toRad(lat2 - lat1);
+                                    const dLon = toRad(lon2 - lon1);
 
-                                            const a =
-                                                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                                                Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-                                                Math.sin(dLon / 2) * Math.sin(dLon / 2);
-                                            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-                                            const distance = R * c;
+                                    const a =
+                                        Math.sin(dLat / 2) *
+                                            Math.sin(dLat / 2) +
+                                        Math.cos(toRad(lat1)) *
+                                            Math.cos(toRad(lat2)) *
+                                            Math.sin(dLon / 2) *
+                                            Math.sin(dLon / 2);
+                                    const c =
+                                        2 *
+                                        Math.atan2(
+                                            Math.sqrt(a),
+                                            Math.sqrt(1 - a),
+                                        );
+                                    const distance = R * c;
 
-                                            totalDistance += distance;
-                                        }
+                                    totalDistance += distance;
+                                }
 
-                                        return totalDistance.toFixed(2);
-                                })()} km`
-                            }
+                                return totalDistance.toFixed(2);
+                            })()} km`}
                         />
                     </div>
                 </div>
             </div>
-
-            <button
-                onClick={saveTravel}
-                className="absolute bottom-[5%] left-[25%] z-[300] flex rounded-full bg-green-400 px-4 py-1.5 text-[10px] font-bold text-black shadow-lg transition-colors hover:bg-green-300"
-            >
-                Salvar
-            </button>
         </div>
     );
 }
@@ -244,10 +284,10 @@ export default function ModalnewTravel({
 function StatItem({ label, value }: { label: string; value: string | number }) {
     return (
         <div className="flex items-center justify-between gap-6">
-            <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase">
+            <span className="text-[10px] font-bold tracking-wider text-[#ffe2b6] uppercase">
                 {label}
             </span>
-            <span className="font-mono text-sm font-black text-blue-400">
+            <span className="font-mono text-sm font-black text-[#ffe2b6]">
                 {value}
             </span>
         </div>

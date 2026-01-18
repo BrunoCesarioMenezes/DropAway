@@ -11,6 +11,7 @@ export default function ModalLeftSide({
     setSelectedCities,
     setCenter,
     setZoom,
+    saveTravel,
 }: {
     isLoaded: boolean;
     handleCitySelection: (cityData: City) => void;
@@ -19,6 +20,7 @@ export default function ModalLeftSide({
     setSelectedCities: (cities: City[]) => void;
     setCenter: (center: { lat: number; lng: number }) => void;
     setZoom: (zoom: number) => void;
+    saveTravel: () => void;
 }) {
 
     const handleAddActivity = ({
@@ -68,7 +70,7 @@ export default function ModalLeftSide({
     return (
 
         // TÍTULO
-        <div className="flex h-full w-[700px] flex-col overflow-hidden p-3 text-white">
+        <div className="flex h-full w-[700px] flex-col justify-center content-center overflow-hidden p-3 overflow-y-auto text-white">
             <div className="mb-6 flex flex-col items-center">
                 <h2 className="text-2xl font-black tracking-tight">
                     Roteiro de Viagem
@@ -88,8 +90,8 @@ export default function ModalLeftSide({
             </div>
 
             {/* MEUS DESTINOS */}
-            <div className="custom-scrollbar flex-1 space-y-4 overflow-y-auto pr-2">
-                <div className="sticky top-0 z-10 mb-2 flex items-center justify-between py-2">
+            <div className="custom-scrollbar flex-1 space-y-4 pr-2">
+                <div className="mb-2 flex items-center justify-between py-2">
                     <p className="text-xs font-black tracking-widest text-[#ffffffe7] uppercase">
                         Meus Destinos
                     </p>
@@ -98,7 +100,7 @@ export default function ModalLeftSide({
                     </span>
                 </div>
                 {selectedCities.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-800 py-12 text-slate-600">
+                    <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-[#ffffff5b] py-12 text-[#ffffff5b]">
                         <p className="text-xs italic">
                             Nenhuma cidade adicionada ainda...
                         </p>
@@ -131,6 +133,12 @@ export default function ModalLeftSide({
                     ))
                 )}
             </div>
+            <button
+                onClick={saveTravel}
+                className="mx-auto mt-10 flex max-w-[200px] items-center justify-center rounded-full bg-[#ffe2b6] px-4 py-1.5 font-bold text-black shadow-lg transition-colors hover:bg-green-300 hover:cursor-pointer"
+            >
+                Salvar
+            </button>
         </div>
     );
 }

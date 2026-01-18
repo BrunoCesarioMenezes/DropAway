@@ -150,13 +150,13 @@ export default function CityItem({ city, onAddActivity, onRemoveActivity, onRemo
                 </button>
             </div>
 
-            {/* Abas */}
+            {/* Abas de DIAS */}
             <div className="no-scrollbar mb-3 flex flex-nowrap gap-1 overflow-x-auto pb-2">
                 {city.day_array?.map((_, index) => (
                     <button
                         key={index}
                         onClick={() => setActiveDay(index)}
-                        className={`rounded-md px-3 py-1 text-[10px] font-bold whitespace-nowrap transition-all ${activeDay === index ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-400 hover:bg-slate-600'}`}
+                        className={`rounded-md px-3 py-1 text-[10px] font-bold whitespace-nowrap transition-all ${activeDay === index ? 'bg-[#ffe8c5e7] text-black' : 'bg-[#ffe8c52b] text-[#ffe8c5c5] hover:bg-[#ffe8c55d]'}`}
                     >
                         Dia {index + 1}
                     </button>
@@ -170,14 +170,14 @@ export default function CityItem({ city, onAddActivity, onRemoveActivity, onRemo
                     onChange={(e) => setValue(e.target.value)}
                     disabled={!ready}
                     placeholder={`Adicionar ao Dia ${activeDay + 1}...`}
-                    className="w-full rounded-lg border border-slate-700 bg-slate-900 p-2 text-xs text-white outline-none focus:border-blue-400"
+                    className="w-full rounded-lg border border-[#ffe8c55d] bg-[#261701] p-2 text-xs text-white outline-none focus:border-[#ffe8c5]"
                 />
                 {status === "OK" && (
-                    <ul className="absolute z-30 w-full bg-slate-700 border border-slate-600 mt-1 rounded-lg shadow-2xl max-h-40 overflow-y-auto">
+                    <ul className="absolute z-30 w-full bg-[#261701] border border-[#ffe8c55d] mt-1 rounded-lg shadow-2xl max-h-40 overflow-y-auto">
                         {filteredData.map(({ place_id, description }) => (
-                            <li key={place_id} onClick={() => handlePlaceSelect(place_id)} className="p-2 text-[10px] hover:bg-slate-600 cursor-pointer border-b border-slate-600 last:border-none">
+                            <li key={place_id} onClick={() => handlePlaceSelect(place_id)} className="p-2 text-[10px] hover:bg-[#ffe2b625] cursor-pointer border-b border-[#ffe8c55d] last:border-none">
                                 <span className="font-bold block text-white">{description.split(',')[0]}</span>
-                                <span className="text-slate-400">{description.split(',').slice(1).join(',')}</span>
+                                <span className="text-[#ffffffb4]">{description.split(',').slice(1).join(',')}</span>
                             </li>
                         ))}
                     </ul>
@@ -187,10 +187,10 @@ export default function CityItem({ city, onAddActivity, onRemoveActivity, onRemo
             {/* Lista de Atividades do Dia */}
             <div className="custom-scrollbar max-h-40 space-y-2 overflow-y-auto pr-1">
                 {city.day_array?.[activeDay]?.activities.map((act, idx) => (
-                    <div key={idx} className="bg-slate-900/50 p-2 rounded-lg border border-slate-700 flex flex-col gap-1">
+                    <div key={idx} className="bg-[#261701] p-2 rounded-lg border border-[#ffe8c55d] flex flex-col gap-1">
                         <div className="flex justify-between items-center">
-                            <span onClick={() => {handleActivityCenter(act)}} className="font-bold text-blue-300 text-[11px] truncate hover:underline">{act.name}</span>
-                            <button onClick={() => onRemoveActivity(activeDay, idx)} className="text-slate-600 hover:text-red-400 text-xs">✕</button>
+                            <span onClick={() => {handleActivityCenter(act)}} className="font-bold text-[#ffe8c5] text-[11px] truncate hover:underline hover:cursor-pointer">{act.name}</span>
+                            <button onClick={() => onRemoveActivity(activeDay, idx)} className="text-[#ffffffb8] hover:text-red-400 text-xs">✕</button>
                         </div>
                         <div className="flex gap-2 text-[9px] font-medium">
                             {act.rating && (
@@ -207,7 +207,7 @@ export default function CityItem({ city, onAddActivity, onRemoveActivity, onRemo
                     </div>
                 ))}
                 {city.day_array?.[activeDay]?.activities.length === 0 && (
-                    <p className="py-2 text-center text-[10px] text-slate-500 italic">
+                    <p className="py-2 text-center text-[10px] text-[#ffffffb8] italic">
                         Nenhuma atividade no Dia {activeDay + 1}
                     </p>
                 )}
