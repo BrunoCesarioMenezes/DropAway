@@ -4,6 +4,8 @@ import { useState } from 'react';
 
 import EditModal from '@/components/user/EditModal';
 import CreateUserModal from '../../../components/user/CreateModal';
+import DeleteModal from '@/components/user/DeleteModal'
+
 
 type User = {
     id: number;
@@ -20,6 +22,7 @@ export default function Index({ users }: Props) {
 
     const [createVisible, setCreateVisible] = useState(false);
     const [editModalVisible, setEditModalVisible] = useState<User | null>(null)
+    const [deleteModalVisible, setDeleteModalVisible] = useState<User | null>(null)
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-[#180C02] p-5">
@@ -99,6 +102,8 @@ export default function Index({ users }: Props) {
                                     {/* Ações */}
                                     <td className=''>
                                         <div className="flex gap-3 items-center justify-center">
+
+                                            {/* Editar */}
                                             <button
                                                 onClick={() => setEditModalVisible(user)}
                                                 className="text-sm font-semibold text-[#3b1f0b] hover:underline hover:cursor-pointer"
@@ -106,19 +111,14 @@ export default function Index({ users }: Props) {
                                                 Editar
                                             </button>
 
-                                            <Link
-                                                href={`/admin/users/${user.id}`}
-                                                method="delete"
-                                                as="button"
-                                                onBefore={() =>
-                                                    confirm(
-                                                        'Deseja remover este usuário?',
-                                                    )
-                                                }
+                                            {/* Remover */}
+                                            <button
+                                                onClick={() => setDeleteModalVisible(user)}
                                                 className="text-sm font-semibold text-red-700 hover:underline hover:cursor-pointer"
                                             >
                                                 Remover
-                                            </Link>
+                                            </button>
+
                                         </div>
 
                                     </td>
@@ -138,6 +138,13 @@ export default function Index({ users }: Props) {
                 <EditModal
                     user={editModalVisible}
                     onClose={() => setEditModalVisible(null)}
+                />
+            )}  
+            {/* MODAL EXCLUIR */}
+            {deleteModalVisible && (
+                <DeleteModal
+                    user={deleteModalVisible}
+                    onClose={() => setDeleteModalVisible(null)}
                 />
             )}
         </div>
