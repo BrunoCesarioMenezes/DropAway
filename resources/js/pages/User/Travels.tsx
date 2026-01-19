@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Head, router } from '@inertiajs/react'; // Importe o router do Inertia
 import ModalnewTravel from "../../components/travel-components/travel-page/ModalNewTravel";
+import { HomeIcon, UserIcon } from "@heroicons/react/24/outline";
+import NavbarAdm from "@/components/NavbarAdm";
+import NavbarUser from "@/components/NavbarUser";
 
 // Defina a interface para o TypeScript não reclamar
 interface Trip {
@@ -48,49 +51,56 @@ export default function Travels({ trips }: { trips: Trip[] }) {
     console.log("Viagens recebidas do Laravel:", trips);
 
     return (
-        <div className="flex flex-col h-screen p-8 bg-slate-950 text-white overflow-y-auto">
-            <Head title="Minhas Viagens" />
+        <div className="flex flex-col h-screen p-8 bg-[#362312] text-white overflow-y-auto">
+            <Head />
+            {/* Header */}
+            <NavbarUser></NavbarUser>
+                <div className="flex mt-10 w-full items-center justify-between border-b-2 border-[#F8F4E1] pb-5">
 
-            <h1 className="text-3xl font-bold mb-2">Suas viagens</h1>
-            <p className="text-slate-400 mb-8">Gerencie suas próximas aventuras.</p>
+                <div>
+                <h3 className="text-2xl font-bold text-[#F8F4E1] mb-2">Suas viagens</h3>
+                <p className="text-[#F8F4E1]">Gerencie suas próximas aventuras.</p>
+                </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                </div>
+
+
+            <div className="pt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 
                 {/* Botão de Criar */}
                 <button
                     onClick={toggleModal}
-                    className="flex flex-col items-center justify-center h-64 border-2 border-dashed border-slate-700 rounded-xl hover:border-blue-500 hover:bg-slate-900 transition-all group"
+                    className="flex flex-col items-center justify-center h-64 border-2 border-dashed border-[#F8F4E1] rounded-xl hover:border-[#362312] hover:bg-[#F8F4E1] transition-all group"
                 >
-                    <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mb-4 group-hover:bg-blue-600 transition-colors">
-                        <span className="text-3xl text-slate-400 group-hover:text-white">+</span>
+                    <div className="w-16 h-16 bg-[#F8F4E1] rounded-full flex items-center justify-center mb-4 group-hover:bg-[#362312] transition-colors">
+                        <span className="text-3xl text-[#362312] group-hover:text-[#F8F4E1]">+</span>
                     </div>
-                    <span className="font-semibold text-slate-300 group-hover:text-white">Criar nova viagem</span>
+                    <span className="font-semibold text-[#F8F4E1] group-hover:text-[#362312]">Criar nova viagem</span>
                 </button>
 
                 {/* MUDANÇA 3: Mapeie direto a prop 'trips' */}
                 {trips && trips.map((trip) => (
-                    <div key={trip.id} className="relative flex flex-col justify-between h-64 bg-slate-900 rounded-xl p-6 shadow-lg border border-slate-800">
+                    <div key={trip.id} className="relative flex flex-col justify-between h-64 bg-[#ffe2b6] rounded-xl p-6 shadow-lg border border-[#ffe8c55d]">
                         <div>
-                            <span>{trip.id}</span>
-                            <h3 className="text-xl font-bold text-white">{trip.name}</h3>
-                            <span className="bg-blue-900/50 text-blue-200 text-xs px-2 py-1 rounded mt-2 inline-block">
+                            <h3 className="text-xl font-bold text-[#362312]">{trip.name}</h3>
+                            <span className="bg-green-800 text-[#ffe2b6] mr-2  text-xs px-2 py-1 rounded mt-2 inline-block">
                                 Planejada
                             </span>
-                            <span className="bg-blue-900/50 text-blue-200 text-xs px-2 py-1 rounded mt-2 inline-block">
+                            <span className="bg-blue-500 text-[#ffe2b6] text-xs px-2 py-1 rounded mt-2 inline-block">
                                 Data de início: {new Date(trip.start_date + 'T12:00:00').toLocaleDateString('pt-BR')}
                             </span>
-                            <span className="bg-blue-900/50 text-blue-200 text-xs px-2 py-1 rounded mt-2 inline-block">
+                            <span className="bg-red-500 text-[#ffe2b6] text-xs px-2 py-1 rounded mt-2 inline-block">
                                 Data de fim: {new Date(trip.end_date + 'T12:00:00').toLocaleDateString('pt-BR')}
                             </span>
                         </div>
 
                         <div className="flex gap-2 mt-4 pt-4 border-t border-slate-800">
-                            <button onClick={() => {handleEdit(trip.id)}} className="flex-1 px-3 py-2 bg-slate-800 hover:bg-slate-700 rounded text-blue-400 text-sm">
+                            <button onClick={() => {handleEdit(trip.id)}} className="flex-1 px-3 py-2 bg-[#362312] hover:bg-slate-700 rounded text-[#ffe2b6] text-sm">
                                 Visualizar
                             </button>
                             <button
                                 onClick={() => handleDelete(trip.id)}
-                                className="px-3 py-2 bg-slate-800 hover:bg-red-900/30 text-slate-400 hover:text-red-400 rounded transition-colors"
+                                className="px-3 py-2 bg-slate-800 hover:bg-red-900/30 text-[#ffe2b6] hover:text-red-400 rounded transition-colors"
                             >
                                 Deletar
                             </button>
@@ -99,7 +109,6 @@ export default function Travels({ trips }: { trips: Trip[] }) {
                 ))}
             </div>
 
-            <button className="bg-red-500 px-2 py-1 w-32 self-start mt-4" onClick={logout}>Logout</button>
 
             {isModalOpen && (
                 <ModalnewTravel

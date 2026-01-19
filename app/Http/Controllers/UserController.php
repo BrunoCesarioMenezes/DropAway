@@ -71,7 +71,7 @@ public function store(Request $request)
 
     Auth::login($user);
 
-    return redirect(route('dashboard', absolute: false));
+    return redirect(route('login', absolute: false));
 
     }
 
