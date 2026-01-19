@@ -30,6 +30,6 @@ composer run dev
 - Admin
     - Email: admin@example.com
     - Senha: password
-  - User
+- User
     - Email: test@example.com
     - Senha: password
