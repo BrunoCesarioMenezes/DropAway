@@ -48,7 +48,7 @@ export default function CityItem({ city, onAddActivity, onRemoveActivity, onRemo
     });
 
     const filteredData = data.filter(suggestion => {
-        const descLower = suggestion.description.toLowerCase().includes(city.name.toLowerCase().split(',')[0]);
+        const descLower = suggestion;
         return descLower;
     });
 
@@ -101,10 +101,9 @@ export default function CityItem({ city, onAddActivity, onRemoveActivity, onRemo
     };
 
     const handleActivityCenter = (activity: Activity) => {
-        console.log('tentando', activity);
         if (activity.lat && activity.lng) {
             onSetCenter({ lat: activity.lat, lng: activity.lng });
-            onSetZoom(15);
+            onSetZoom(20);
         }
     };
 

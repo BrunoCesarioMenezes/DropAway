@@ -2,8 +2,8 @@
 
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
-use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\TripController;
+use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\AnyRoleMiddleware;
 use App\Http\Middleware\UserMiddleware;
 use Illuminate\Support\Facades\Http;

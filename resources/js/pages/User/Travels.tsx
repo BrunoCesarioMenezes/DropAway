@@ -47,9 +47,6 @@ export default function Travels({ trips }: { trips: Trip[] }) {
     }
 };
 
-    // Debug: Veja no console do navegador se os dados chegaram
-    console.log("Viagens recebidas do Laravel:", trips);
-
     return (
         <div className="flex flex-col h-screen p-8 bg-[#362312] text-white overflow-y-auto">
             <Head />
