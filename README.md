@@ -25,3 +25,11 @@ Utilize um dos comandos abaixo para iniciar a aplicação.
 php artisan serve
 composer run dev
 ```
+
+## Logins de Teste
+- Admin
+    - Email: admin@example.com
+    - Senha: password
+  - User
+    - Email: test@example.com
+    - Senha: password
