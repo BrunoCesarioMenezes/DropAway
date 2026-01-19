@@ -82,7 +82,7 @@ export default function Travels({ trips }: { trips: Trip[] }) {
 
                 {/* MUDANÇA 3: Mapeie direto a prop 'trips' */}
                 {trips && trips.map((trip) => (
-                    <div key={trip.id} className="relative flex flex-col justify-between h-64 bg-gradient-to-b from-[#ffe2b6] to-[#bd965d] rounded-xl p-6 shadow-[0_0_80px_rgba(0,0,0,0.4)] border border-[#ffe8c55d]">
+                    <div key={trip.id} className="relative flex flex-col justify-between h-64 bg-gradient-to-br from-[#ffe2b6] to-[#d8b580] rounded-xl p-6 shadow-[0_0_80px_rgba(0,0,0,0.4)] border border-[#ffe8c55d]">
                         <div className="flex flex-col gap-4">
                             <h3 className="text-xl font-bold text-[#362312]">{trip.name}</h3>
                             <div className="flex flex-col gap-1 w-40">
