@@ -20,8 +20,6 @@ export default function NavbarUser() {
             <div className="flex shrink-0 items-center">
               <h1 className='font-bold font-sansita italic text-3xl text-[#362312]'>Dropaway</h1>
             </div>
-            <div className="hidden sm:ml-6 sm:block">
-            </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
 
