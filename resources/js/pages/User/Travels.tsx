@@ -4,6 +4,7 @@ import ModalnewTravel from "../../components/travel-components/travel-page/Modal
 import { HomeIcon, UserIcon } from "@heroicons/react/24/outline";
 import NavbarAdm from "@/components/NavbarAdm";
 import NavbarUser from "@/components/NavbarUser";
+import DeleteModal from "@/components/travel-components/DeleteModal";
 
 // Defina a interface para o TypeScript não reclamar
 interface Trip {
@@ -15,10 +16,7 @@ interface Trip {
 
 // MUDANÇA 1: Receba 'trips' aqui nas props
 export default function Travels({ trips }: { trips: Trip[] }) {
-
-    // Remova: const [trips, setTrips] = useState(...) -> Não precisa mais!
-    // Remova: useEffect(...) -> Não precisa mais!
-
+    const [deleteModal, setDeleteModal] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedTripId, setSelectedTripId] = useState<number | null>(null);
     const toggleModal = () => {
@@ -52,7 +50,14 @@ export default function Travels({ trips }: { trips: Trip[] }) {
             <Head />
             {/* Header */}
             <NavbarUser></NavbarUser>
-                <div className="flex mt-10 w-full items-center justify-between border-b-2 border-[#F8F4E1] pb-5">
+            {deleteModal && (
+                    <DeleteModal id={selectedTripId} onClose={() => {
+                        setSelectedTripId(null);
+                        setDeleteModal(false);
+                    }}>
+                    </DeleteModal>
+            )}
+                <div className="flex mt-14 w-full items-center justify-between border-b-2 border-[#F8F4E1] pb-5">
 
                 <div>
                 <h3 className="text-2xl font-bold text-[#F8F4E1] mb-2">Suas viagens</h3>
@@ -67,7 +72,7 @@ export default function Travels({ trips }: { trips: Trip[] }) {
                 {/* Botão de Criar */}
                 <button
                     onClick={toggleModal}
-                    className="flex flex-col items-center justify-center h-64 border-2 border-dashed border-[#F8F4E1] rounded-xl hover:border-[#362312] hover:bg-[#F8F4E1] transition-all group"
+                    className="shadow-[inset_0_0_40px_rgba(0,0,0,0.3)] flex flex-col items-center justify-center h-64 border-2 border-dashed border-[#F8F4E1] rounded-xl hover:border-[#362312] hover:bg-[#F8F4E1] transition-all group"
                 >
                     <div className="w-16 h-16 bg-[#F8F4E1] rounded-full flex items-center justify-center mb-4 group-hover:bg-[#362312] transition-colors">
                         <span className="text-3xl text-[#362312] group-hover:text-[#F8F4E1]">+</span>
@@ -77,27 +82,29 @@ export default function Travels({ trips }: { trips: Trip[] }) {
 
                 {/* MUDANÇA 3: Mapeie direto a prop 'trips' */}
                 {trips && trips.map((trip) => (
-                    <div key={trip.id} className="relative flex flex-col justify-between h-64 bg-[#ffe2b6] rounded-xl p-6 shadow-lg border border-[#ffe8c55d]">
-                        <div>
+                    <div key={trip.id} className="relative flex flex-col justify-between h-64 bg-gradient-to-b from-[#ffe2b6] to-[#bd965d] rounded-xl p-6 shadow-[0_0_80px_rgba(0,0,0,0.4)] border border-[#ffe8c55d]">
+                        <div className="flex flex-col gap-4">
                             <h3 className="text-xl font-bold text-[#362312]">{trip.name}</h3>
-                            <span className="bg-green-800 text-[#ffe2b6] mr-2  text-xs px-2 py-1 rounded mt-2 inline-block">
-                                Planejada
-                            </span>
-                            <span className="bg-blue-500 text-[#ffe2b6] text-xs px-2 py-1 rounded mt-2 inline-block">
-                                Data de início: {new Date(trip.start_date + 'T12:00:00').toLocaleDateString('pt-BR')}
-                            </span>
-                            <span className="bg-red-500 text-[#ffe2b6] text-xs px-2 py-1 rounded mt-2 inline-block">
-                                Data de fim: {new Date(trip.end_date + 'T12:00:00').toLocaleDateString('pt-BR')}
-                            </span>
+                            <div className="flex flex-col gap-1 w-40">
+                                <span className="bg-cyan-700 text-[#ffe2b6] text-xs font-bold px-2 py-1 rounded mt-2 inline-block">
+                                    Data de início: {new Date(trip.start_date + 'T12:00:00').toLocaleDateString('pt-BR')}
+                                </span>
+                                <span className="bg-[#db3a25] text-[#ffe2b6] text-xs font-bold px-2 py-1 rounded mt-2 inline-block">
+                                    Data de fim: {new Date(trip.end_date + 'T12:00:00').toLocaleDateString('pt-BR')}
+                                </span>
+                            </div>
                         </div>
 
-                        <div className="flex gap-2 mt-4 pt-4 border-t border-slate-800">
-                            <button onClick={() => {handleEdit(trip.id)}} className="flex-1 px-3 py-2 bg-[#362312] hover:bg-slate-700 rounded text-[#ffe2b6] text-sm">
+                        <div className="flex gap-2 mt-4 pt-4 border-t border-[#3a2b1d]">
+                            <button onClick={() => {handleEdit(trip.id)}} className="font-bold flex-1 w-[50%] px-3 py-2 bg-[#3a2b1d] hover:bg-[#2b1b0d] rounded hover:text-[#f7eddd] text-sm transition-colors">
                                 Visualizar
                             </button>
                             <button
-                                onClick={() => handleDelete(trip.id)}
-                                className="px-3 py-2 bg-slate-800 hover:bg-red-900/30 text-[#ffe2b6] hover:text-red-400 rounded transition-colors"
+                                onClick={() => {
+                                    setSelectedTripId(trip.id);
+                                    setDeleteModal(true);
+                                }}
+                                className="font-bold w-[50%] px-3 py-2 bg-red-600 hover:bg-red-800 text-[#ffe2b6] hover:text-[#f7eddd] rounded transition-colors"
                             >
                                 Deletar
                             </button>

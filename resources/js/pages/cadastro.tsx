@@ -20,7 +20,7 @@ const EyeOffIcon = () => (
 export default function CreateUser() {
     const [preview, setPreview] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
-    
+
     const [showPassword, setShowPassword] = useState(false);
     const [showPasswordConf, setShowPasswordConf] = useState(false);
 
@@ -43,7 +43,7 @@ export default function CreateUser() {
                 <img src={box} alt="" className="w-full h-[60px] object-contain flex items-center justify-center mt-5" />
 
                 {/* VOLTAR */}
-                <button onClick={handleLogin} className="w-6 ring-1 relative flex rounded-full hover:rounded-full hover:ring-2 ring-[#FFB562] bg-[#7C420B] hover:bg-[#402103]" type="submit">
+                <button onClick={handleLogin} className="w-6 m-2 relative flex hover:text-gray-500" type="submit">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
                     </svg>
@@ -107,7 +107,7 @@ export default function CreateUser() {
 
                         <label >Nome: </label>
                         <input className="flex-1 bg-transparent border-b border-white text-white focus:outline-none pb-1"
-                        type="text" 
+                        type="text"
                         name="name"
                         required/>
 
@@ -116,7 +116,7 @@ export default function CreateUser() {
                     <div className='flex items-end mt-2 m-12 mb-2 gap-6'>
 
                         <label >Email: </label>
-                        <input className="flex-1 bg-transparent border-b border-white text-white focus:outline-none pb-1" 
+                        <input className="flex-1 bg-transparent border-b border-white text-white focus:outline-none pb-1"
                         type="email" name='email' required />
 
                     </div>
