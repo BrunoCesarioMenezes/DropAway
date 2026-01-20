@@ -1,3 +1,8 @@
+# DropAway
+
+Trabalho de Engenharia de Software 2025.3.
+Desenvolvedores: Bernardo Bressan, Bruno Cesário, João Victor Macedo, José Simões e Pedro Bonfá.
+
 ## Pré - Requisitos
 Abaixo estão listados os pré-requisitos do código.
 ```
